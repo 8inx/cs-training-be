@@ -1,0 +1,8 @@
+{
+  "port": "PORT",
+  "dbUri": "DB_URI",
+  "secretKey": "SECRET_KEY",
+  "crispWebsite": "CRISP_WEBSITE",
+  "crispIdenttifier": "CRISP_IDENTIFIER",
+  "crispKey": "CRISP_KEY"
+}

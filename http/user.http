@@ -1,0 +1,54 @@
+### Login and get token
+# @name login
+POST http://localhost:{{$dotenv PORT}}/auth/login
+Content-Type: application/json
+
+{
+    "email": "admin@email.com",
+    "password": "password"
+}
+
+
+###
+@baseURL = http://localhost:{{$dotenv PORT}}/user
+@token = {{login.response.headers.Set-Cookie}}
+@userId = 63416e57aac62194ab92ff41
+
+### Update User
+PUT {{ baseURL }}/{{userId}}
+Content-Type: application/json
+Cookie: {{token}}
+
+{
+    "email": "example@email.com",
+    "password": "password",
+    "firstName": "Tony",
+    "lastName": "Stark"
+}
+
+
+### Update User Role
+PUT {{ baseURL }}/{{userId}}/role
+Content-Type: application/json
+Cookie: {{token}}
+
+{
+    "role": "coach"
+}
+
+
+### Delete User
+DELETE {{ baseURL }}/{{userId}}
+Content-Type: application/json
+Cookie: {{token}}
+
+
+### Find User by Id
+GET {{ baseURL }}/id/{{userId}}
+Content-Type: application/json
+
+
+### Find All Users
+GET {{ baseURL }}/all
+# ?role=admin&page=1&size=20
+Content-Type: application/json

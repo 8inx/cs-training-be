@@ -1,0 +1,28 @@
+# BASE URL
+@baseURL = http://localhost:{{$dotenv PORT}}/auth
+
+### Register
+POST {{ baseURL }}/register
+Content-Type: application/json
+
+{
+    "email": "example@email.com",
+    "password": "password",
+    "firstName": "Tony",
+    "lastName": "Stark"
+}
+
+
+### Login
+# @name login
+POST {{ baseURL }}/login
+Content-Type: application/json
+
+{
+    "email": "example@email.com",
+    "password": "password"
+}
+
+### Logout
+POST {{ baseURL }}/logout
+Content-Type: application/json

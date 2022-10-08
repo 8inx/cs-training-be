@@ -1,0 +1,21 @@
+{
+  "presets": ["@babel/preset-env"],
+  "plugins": [
+    [
+      "module-resolver",
+      {
+        "alias": {
+          "@middlewares": "./src/middlewares",
+          "@schema": "./src/schema",
+          "@models": "./src/models",
+          "@routes": "./src/routes",
+          "@controllers": "./src/controllers",
+          "@services": "./src/services",
+          "@errors": "./src/errors",
+          "@databases": "./src/databases",
+          "@utils": "./src/utils"
+        }
+      }
+    ]
+  ]
+}

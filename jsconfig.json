@@ -1,0 +1,25 @@
+{
+    "compilerOptions": {
+      "target": "es6",
+      "module": "CommonJS",
+      "strict": true,
+      "moduleResolution": "node",
+      "skipLibCheck": true,
+      "rootDir": "./src",
+      "baseUrl": "./src",
+      "paths": {
+        "@/*": ["/*"],
+        "@middlewares/*": ["middlewares/*"],
+        "@schema/*": ["schema/*"],
+        "@models/*": ["models/*"],
+        "@routes/*": ["routes/*"],
+        "@controllers/*": ["controllers/*"],
+        "@services/*": ["services/*"],
+        "@errors/*": ["errors/*"],
+        "@databases": ["databases"],
+        "@utils/*": ["utils/*"]
+      }
+    },
+    "include": ["src/**/*"],
+    "exclude": ["node_modules"],
+}
