@@ -10,6 +10,7 @@ import swaggerDocs from '@utils/swagger';
 import connect from '@databases';
 import authRoute from '@routes/auth.route';
 import userRoute from '@routes/user.route';
+import exerciseRoute from '@routes/exercise.route';
 import errorMiddleware from '@middlewares/error.middleware';
 
 const port = config.get('port');
@@ -25,6 +26,7 @@ app.use(cookieParser());
 /* routes */
 app.use('/auth', authRoute);
 app.use('/user', userRoute);
+app.use('/exercise', exerciseRoute);
 
 /* errorMiddleware */
 app.use(errorMiddleware);

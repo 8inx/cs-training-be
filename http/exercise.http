@@ -1,0 +1,26 @@
+### Login and get token
+# @name login
+POST http://localhost:{{$dotenv PORT}}/auth/login
+Content-Type: application/json
+
+{
+    "email": "admin@email.com",
+    "password": "password"
+}
+
+
+###
+@baseURL = http://localhost:{{$dotenv PORT}}/exercise
+@token = {{login.response.headers.Set-Cookie}}
+
+
+### Bulk Insert Exercise
+POST {{ baseURL }}/bulkInsert
+Content-Type: application/json
+Cookie: {{token}}
+
+{
+    "max": 10,
+    "dateStart": "2019-12-31T16:00:30.000Z",
+    "dateEnd": "2022-12-31T16:22:30.000Z"
+}
