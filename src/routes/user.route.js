@@ -26,19 +26,19 @@ const route = Router();
  *    tags:
  *      - user
  *    summary: update user
- *    requestBody:
- *      description: update body
- *      required: true
- *      content:
- *        application/json:
- *          schema:
- *            $ref: '#/definitions/user/update'
  *    parameters:
  *    - name: id
  *      in: path
  *      type: string
  *      description: user id
  *      required: true
+ *    requestBody:
+ *      description: update body
+ *      required: true
+ *      content:
+ *        application/json:
+ *          schema:
+ *            $ref: '#/definitions/user/updateUser'
  *    responses:
  *      200:
  *        description: 'Success'
@@ -64,19 +64,19 @@ route.put('/:id', validationMiddleware(updateUserSchema), verifyAuthorization, u
  *    tags:
  *      - user
  *    summary: update user role
- *    requestBody:
- *      description: update body
- *      required: true
- *      content:
- *        application/json:
- *          schema:
- *            $ref: '#/definitions/user/updateRole'
  *    parameters:
  *    - name: id
  *      in: path
  *      type: string
  *      description: user id
  *      required: true
+ *    requestBody:
+ *      description: update body
+ *      required: true
+ *      content:
+ *        application/json:
+ *          schema:
+ *            $ref: '#/definitions/user/updateUserRole'
  *    responses:
  *      200:
  *        description: 'Success'
