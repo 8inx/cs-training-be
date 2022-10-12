@@ -46,7 +46,7 @@ export const findAllUsersHandler = async (req, res, next) => {
   try {
     const query = req.query;
     const findUsers = await findAllUsers(query);
-    res.status(200).json({ data: findUsers, mesage: 'find user' });
+    res.status(200).json({ data: findUsers, mesage: 'find all users' });
   } catch (error) {
     next(error);
   }

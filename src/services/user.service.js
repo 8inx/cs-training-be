@@ -52,9 +52,11 @@ export const findUserById = async userId => {
 
 // find all user
 export const findAllUsers = async query => {
-  const { size, page, ...restQuery } = query;
-  const limit = size || 20;
-  const skip = page * limit;
-  const findUsers = await User.find(restQuery).skip(skip).limit(limit);
+  const { size = 30, page = 1, role } = query;
+  const limit = size;
+  const skip = Math.abs(page - 1) * limit;
+  const findUsers = await User.find({ ...(role ? { role } : {}) })
+    .skip(skip)
+    .limit(limit);
   return findUsers;
 };

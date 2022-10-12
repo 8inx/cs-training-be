@@ -173,7 +173,7 @@ route.get('/id/:id', validationMiddleware(findUserByIdSchema), findUserByIdHandl
  *      schema:
  *        type: number
  *        description: page size
- *        default: 20
+ *        default: 30
  *    responses:
  *      200:
  *        description: 'Success'
