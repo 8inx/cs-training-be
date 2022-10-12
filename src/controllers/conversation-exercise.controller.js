@@ -1,4 +1,4 @@
-const { bulkInsertExercise } = require('@services/exercise.service');
+const { bulkInsertExercise } = require('@services/conversation-exercise.service');
 
 export const bulkInsertExerciseHandler = async (req, res, next) => {
   try {

@@ -1,6 +1,6 @@
 import mongoose from 'mongoose';
 
-const exerciseConversationSchema = new mongoose.Schema({
+const conversationExerciseSchema = new mongoose.Schema({
   sessionId: {
     type: String,
     unique: true,
@@ -17,6 +17,6 @@ const exerciseConversationSchema = new mongoose.Schema({
   },
 });
 
-const ExerciseConversation = mongoose.model('ExerciseConversation', exerciseConversationSchema);
+const ConversationExercise = mongoose.model('ConversationExercise', conversationExerciseSchema);
 
-export default ExerciseConversation;
+export default ConversationExercise;

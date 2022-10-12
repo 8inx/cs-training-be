@@ -1,5 +1,5 @@
-import ExerciseConversation from '@models/exercise-conversation.model';
-import ExerciseMessage from '@models/exercise-message.model';
+import ConversationExercise from '@models/conversation-exercise.model';
+import MessageExercise from '@models/message-exercise.model';
 import { getMessagesInConversationList, listConversationMax } from './crisp.service';
 
 /**
@@ -13,12 +13,12 @@ export const bulkInsertExercise = async input => {
 
   // filter duplicates
   const sessionIds = conversations.map(exercise => exercise.sessionId);
-  const duplicateDocs = await ExerciseConversation.find({ sessionId: { $in: sessionIds } });
+  const duplicateDocs = await ConversationExercise.find({ sessionId: { $in: sessionIds } });
   const duplicateIds = duplicateDocs.map(docs => docs.sessionId);
   const filtered = conversations.filter(conversation => !duplicateIds.includes(conversation.sessionId));
 
   // insert many exercise-conversations
-  const InsertManyConversations = await ExerciseConversation.insertMany(filtered, { ordered: false });
+  const InsertManyConversations = await ConversationExercise.insertMany(filtered, { ordered: false });
   const inserted = InsertManyConversations.length;
   const duplicated = duplicateDocs.length;
 
@@ -27,7 +27,7 @@ export const bulkInsertExercise = async input => {
   const messages = await getMessagesInConversationList(insertedSessionIds);
 
   // insert many exercise-messages
-  const InsertManyMessages = await ExerciseMessage.insertMany(messages, { ordered: false });
+  const InsertManyMessages = await MessageExercise.insertMany(messages, { ordered: false });
   const totalMessages = InsertManyMessages.length;
 
   return Promise.resolve({ inserted, duplicated, totalMessages });

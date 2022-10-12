@@ -1,17 +1,17 @@
-import { bulkInsertExerciseHandler } from '@controllers/exercise.controller';
 import { verifyAdmin } from '@middlewares/permission.middleware';
 import validationMiddleware from '@middlewares/validation.middleware';
-import { bulkInsertExerciseSchema } from '@schema/exercise.schema';
+import { bulkInsertExerciseHandler } from '@controllers/conversation-exercise.controller';
+import { bulkInsertExerciseSchema } from '@schema/conversation-exercise.schema';
 import { Router } from 'express';
 
 const route = Router();
 
 /**
  * @openapi
- * '/exercise/bulkInsert':
+ * '/conversation-exercise/bulkInsert':
  *  post:
  *    tags:
- *      - exercise
+ *      - conversation-exercise
  *    summary: bulk insert exercise
  *    requestBody:
  *      description: insert exercise body
@@ -19,7 +19,7 @@ const route = Router();
  *      content:
  *        application/json:
  *          schema:
- *            $ref: '#/definitions/exercise/bulkInsertExercise'
+ *            $ref: '#/definitions/conversationExercise/bulkInsertExercise'
  *    responses:
  *      200:
  *        description: 'Success'
