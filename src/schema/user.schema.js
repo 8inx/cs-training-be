@@ -1,6 +1,6 @@
 import { mixed, object, string, number } from 'yup';
 
-// reusable valid props
+// reusable props
 export const id = string().required('User id is required');
 export const email = string().email('Not valid email').required('Email is required!');
 export const password = string().min(6, 'Too short - should be 6 chars minimum').required('Password is required');
@@ -12,7 +12,7 @@ export const role = mixed().oneOf(['trainee', 'coach', 'admin'], 'Invalid role v
  *  @openapi
  *  definitions:
  *    user:
- *      update:
+ *      updateUser:
  *        type: object
  *        required:
  *          - email
@@ -50,7 +50,7 @@ export const updateUserSchema = object().shape({
  *  @openapi
  *  definitions:
  *    user:
- *      updateRole:
+ *      updateUserRole:
  *        type: object
  *        required:
  *          - role
