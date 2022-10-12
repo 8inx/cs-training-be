@@ -21,7 +21,7 @@ const messageExerciseSchema = new mongoose.Schema(
     content: {
       type: mongoose.Schema.Types.Mixed,
     },
-    segmentIndex: {
+    segmentId: {
       type: Number,
       required: true,
     },

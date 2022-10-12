@@ -74,7 +74,7 @@ export const getMessagesInConversation = async session_id => {
     function (message) {
       // check if new segment
       if (this.lastFrom != 'user' && message.from == 'user') {
-        this.segmentIndex++;
+        this.segmentId++;
       }
 
       this.lastFrom = message.from;
@@ -83,11 +83,11 @@ export const getMessagesInConversation = async session_id => {
         ...message,
         sessionId: message.session_id,
         createdAt: new Date(message.timestamp).toISOString(),
-        segmentIndex: this.segmentIndex,
+        segmentId: this.segmentId,
       };
     },
     {
-      segmentIndex: 0,
+      segmentId: 0,
       lastFrom: '',
     }
   );
