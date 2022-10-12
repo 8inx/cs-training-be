@@ -1,6 +1,6 @@
 import mongoose from 'mongoose';
 
-const exerciseMessageSchema = new mongoose.Schema(
+const messageExerciseSchema = new mongoose.Schema(
   {
     sessionId: {
       type: String,
@@ -35,6 +35,6 @@ const exerciseMessageSchema = new mongoose.Schema(
   }
 );
 
-const ExerciseMessage = mongoose.model('ExerciseMessage', exerciseMessageSchema);
+const MessageExercise = mongoose.model('MessageExercise', messageExerciseSchema);
 
-export default ExerciseMessage;
+export default MessageExercise;

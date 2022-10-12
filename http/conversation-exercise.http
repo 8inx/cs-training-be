@@ -10,7 +10,7 @@ Content-Type: application/json
 
 
 ###
-@baseURL = http://localhost:{{$dotenv PORT}}/exercise
+@baseURL = http://localhost:{{$dotenv PORT}}/conversation-exercise
 @token = {{login.response.headers.Set-Cookie}}
 
 

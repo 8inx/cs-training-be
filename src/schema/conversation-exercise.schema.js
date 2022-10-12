@@ -11,7 +11,7 @@ const payload = {
 /**
  *  @openapi
  *  definitions:
- *    exercise:
+ *    conversationExercise:
  *      bulkInsertExercise:
  *        type: object
  *        required:
