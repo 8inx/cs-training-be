@@ -5,7 +5,7 @@ import { getMessagesInConversationList, listConversationMax } from './crisp.serv
 /**
  * Bulk Insert Exercise
  * @param {{max?:number, dateStart: Date, dateEnd:Date}} input
- * @returns {Promise<{inserted:number, duplicated:number, totalMessages:number}>} result
+ * @returns {{inserted:number, duplicated:number, totalMessages:number}} result
  */
 
 export const bulkInsertExercise = async input => {
@@ -30,5 +30,16 @@ export const bulkInsertExercise = async input => {
   const InsertManyMessages = await MessageExercise.insertMany(messages, { ordered: false });
   const totalMessages = InsertManyMessages.length;
 
-  return Promise.resolve({ inserted, duplicated, totalMessages });
+  return { inserted, duplicated, totalMessages };
+};
+
+/**
+ * Find ConversationExercise By SessionId
+ * @param {string} sessionId
+ * @returns {object}
+ */
+
+export const findBySessionId = async sessionId => {
+  const findConversationExercise = await ConversationExercise.findOne({ sessionId });
+  return findConversationExercise;
 };

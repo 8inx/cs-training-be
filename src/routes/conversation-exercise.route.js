@@ -1,6 +1,6 @@
+import { bulkInsertExerciseHandler, findBySessionIdHandler } from '@controllers/conversation-exercise.controller';
 import { verifyAdmin } from '@middlewares/permission.middleware';
 import validationMiddleware from '@middlewares/validation.middleware';
-import { bulkInsertExerciseHandler } from '@controllers/conversation-exercise.controller';
 import { bulkInsertExerciseSchema } from '@schema/conversation-exercise.schema';
 import { Router } from 'express';
 
@@ -8,11 +8,11 @@ const route = Router();
 
 /**
  * @openapi
- * '/conversation-exercise/bulkInsert':
+ * '/conversation-exercise/bulk-insert':
  *  post:
  *    tags:
  *      - conversation-exercise
- *    summary: bulk insert exercise
+ *    summary: Bulk insert exercise
  *    requestBody:
  *      description: insert exercise body
  *      required: true
@@ -36,6 +36,31 @@ const route = Router();
  *      500:
  *        description: 'Server Error'
  */
-route.post('/bulkInsert', validationMiddleware(bulkInsertExerciseSchema), verifyAdmin, bulkInsertExerciseHandler);
+route.post('/bulk-insert', validationMiddleware(bulkInsertExerciseSchema), verifyAdmin, bulkInsertExerciseHandler);
 
+/**
+ * @openapi
+ * '/conversation-exercise/id/{sessionId}':
+ *  get:
+ *    tags:
+ *      - conversation-exercise
+ *    summary: Find conversation exercise by sessionId
+ *    parameters:
+ *    - name: sessionId
+ *      in: path
+ *      type: string
+ *      description: session id
+ *      required: true
+ *    responses:
+ *      200:
+ *        description: 'Success'
+ *      400:
+ *        description: 'Bad Request'
+ *      404:
+ *        description: 'Not Found'
+ *      500:
+ *        description: 'Server Error'
+ */
+
+route.get('/id/:sessionId', findBySessionIdHandler);
 export default route;
