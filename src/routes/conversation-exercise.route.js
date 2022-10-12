@@ -44,7 +44,7 @@ route.post('/bulk-insert', validationMiddleware(bulkInsertExerciseSchema), verif
 
 /**
  * @openapi
- * '/conversation-exercise/id/{sessionId}':
+ * '/conversation-exercise/session/{sessionId}':
  *  get:
  *    tags:
  *      - conversation-exercise
@@ -66,7 +66,7 @@ route.post('/bulk-insert', validationMiddleware(bulkInsertExerciseSchema), verif
  *        description: 'Server Error'
  */
 
-route.get('/id/:sessionId', findBySessionIdHandler);
+route.get('/session/:sessionId', findBySessionIdHandler);
 
 /**
  * @openapi
