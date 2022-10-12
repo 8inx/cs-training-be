@@ -13,12 +13,13 @@ Content-Type: application/json
 @baseURL = http://localhost:{{$dotenv PORT}}/conversation
 @token = {{login.response.headers.Set-Cookie}}
 @sessionId = session_f622e5d1-3464-40f8-a70a-6514ffc5b69f
-@userId = 16346b13f671f9c7dfc3c99ba
+@userId = 6346b13f671f9c7dfc3c99ba
 
 ### Create Conversation
 
 POST {{baseURL}}
 Content-Type: application/json
+Cookie: {{token}}
 
 {
     "sessionId": "{{sessionId}}",

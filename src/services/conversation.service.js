@@ -25,3 +25,50 @@ export const createConversation = async input => {
   const newConversation = await Conversation.create({ ...input });
   return newConversation;
 };
+
+/**
+ * Update Conversation
+ * @param {string} id conversationId
+ * @param {object} input input body
+ * @returns {Conversation}
+ */
+export const updateConversation = async (id, input) => {
+  const findByIdAndUpdate = await Conversation.findByIdAndUpdate(
+    id,
+    {
+      $set: input,
+    },
+    { new: true }
+  );
+  return findByIdAndUpdate;
+};
+
+/**
+ * Delete Conversation
+ * @param {string} id conversationId
+ * @returns {Conversation} deleted Conversation
+ */
+export const deleteConversation = async id => {
+  const findByIdAndDelete = await Conversation.findByIdAndDelete(id);
+  return findByIdAndDelete;
+};
+
+/**
+ * Find Conversation By Id
+ * @param {string} id conversationId
+ * @returns {Conversation}
+ */
+export const findConversationById = async id => {
+  const findById = await Conversation.findById(id);
+  return findById;
+};
+
+/**
+ * Find User Conversations
+ * @param {string} userId
+ * @returns {Conversation}
+ */
+export const findUserConversations = async userId => {
+  const find = await Conversation.find({ userId });
+  return find;
+};
