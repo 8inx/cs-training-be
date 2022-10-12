@@ -1,0 +1,31 @@
+### Login and get token
+# @name login
+POST http://localhost:{{$dotenv PORT}}/auth/login
+Content-Type: application/json
+
+{
+    "email": "trainee@email.com",
+    "password": "password"
+}
+
+
+###
+@baseURL = http://localhost:{{$dotenv PORT}}/conversation
+@token = {{login.response.headers.Set-Cookie}}
+@sessionId = session_f622e5d1-3464-40f8-a70a-6514ffc5b69f
+@userId = 16346b13f671f9c7dfc3c99ba
+
+### Create Conversation
+
+POST {{baseURL}}
+Content-Type: application/json
+
+{
+    "sessionId": "{{sessionId}}",
+    "userId": "{{userId}}",
+    "meta": {
+        "nickame": "John Doe",
+        "email": "john@email.com",
+        "avatar": ""
+    }
+}

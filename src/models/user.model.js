@@ -26,6 +26,10 @@ const userSchema = new mongoose.Schema(
       type: Array,
       default: [],
     },
+    currentExercises: {
+      type: Array,
+      default: [],
+    },
     role: {
       type: String,
       enum: ['trainee', 'coach', 'admin'],
