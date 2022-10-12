@@ -11,6 +11,7 @@ import connect from '@databases';
 import authRoute from '@routes/auth.route';
 import userRoute from '@routes/user.route';
 import conversationExerciseRoute from '@routes/conversation-exercise.route';
+import messageExerciseRoute from '@routes/message-exercise.route';
 import errorMiddleware from '@middlewares/error.middleware';
 
 const port = config.get('port');
@@ -27,6 +28,7 @@ app.use(cookieParser());
 app.use('/auth', authRoute);
 app.use('/user', userRoute);
 app.use('/conversation-exercise', conversationExerciseRoute);
+app.use('/message-exercise', messageExerciseRoute);
 
 /* errorMiddleware */
 app.use(errorMiddleware);
