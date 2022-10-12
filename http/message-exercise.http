@@ -1,0 +1,15 @@
+@baseURL = http://localhost:{{$dotenv PORT}}/message-exercise
+@sessionId = session_08064421-58a0-4ac2-9b49-3361cf90f761
+@id = 63465cac6bd31d2fd5ba92ca
+@segmentId = 7
+
+### Find Message Exercise By Id
+GET {{ baseURL }}/id/{{id}}
+
+
+### Find Message Exercise By SessionId
+GET {{ baseURL }}/session/{{sessionId}}
+
+
+### Find Message Exercise By SegmentId
+GET {{ baseURL }}/session/{{sessionId}}/segment/{{segmentId}}
