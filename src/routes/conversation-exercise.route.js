@@ -1,4 +1,8 @@
-import { bulkInsertExerciseHandler, findBySessionIdHandler } from '@controllers/conversation-exercise.controller';
+import {
+  bulkInsertExerciseHandler,
+  findAllConversationExerciseHandler,
+  findBySessionIdHandler,
+} from '@controllers/conversation-exercise.controller';
 import { verifyAdmin } from '@middlewares/permission.middleware';
 import validationMiddleware from '@middlewares/validation.middleware';
 import { bulkInsertExerciseSchema } from '@schema/conversation-exercise.schema';
@@ -63,4 +67,36 @@ route.post('/bulk-insert', validationMiddleware(bulkInsertExerciseSchema), verif
  */
 
 route.get('/id/:sessionId', findBySessionIdHandler);
+
+/**
+ * @openapi
+ * '/conversation-exercise/all':
+ *  get:
+ *    tags:
+ *      - conversation-exercise
+ *    summary: Find all converation exercise
+ *    parameters:
+ *    - name: page
+ *      in: query
+ *      schema:
+ *        type: number
+ *        description: page
+ *        default: 1
+ *    - name: size
+ *      in: query
+ *      schema:
+ *        type: number
+ *        description: page size
+ *        default: 30
+ *    responses:
+ *      200:
+ *        description: 'Success'
+ *      400:
+ *        description: 'Bad Request'
+ *      404:
+ *        description: 'Not Found'
+ *      500:
+ *        description: 'Server Error'
+ */
+route.get('/all', findAllConversationExerciseHandler);
 export default route;

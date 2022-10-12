@@ -29,3 +29,8 @@ Cookie: {{token}}
 @sessionId = session_f622e5d1-3464-40f8-a70a-6514ffc5b69f
 ### Find Conversation Exercise By Id
 GET {{ baseURL }}/id/{{sessionId}}
+
+
+### Find All Conversation Exercise
+GET {{ baseURL }}/all
+#?page=1&size=30
