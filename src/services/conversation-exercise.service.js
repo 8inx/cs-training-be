@@ -43,3 +43,17 @@ export const findBySessionId = async sessionId => {
   const findConversationExercise = await ConversationExercise.findOne({ sessionId });
   return findConversationExercise;
 };
+
+/**
+ * Find all Converation Exercise
+ * @param {{size:number, page:number}} [query]
+ * @returns {object[]}
+ */
+
+export const findAllConversationExercise = async query => {
+  const { size = 30, page = 1 } = query;
+  const limit = size;
+  const skip = Math.abs(page - 1) * limit;
+  const findAll = await ConversationExercise.find().skip(skip).limit(limit);
+  return findAll;
+};
