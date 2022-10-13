@@ -1,6 +1,6 @@
 import mongoose from 'mongoose';
 
-const conversationSchema = new mongoose.Schema(
+const trainingSchema = new mongoose.Schema(
   {
     sessionId: {
       type: String,
@@ -20,12 +20,17 @@ const conversationSchema = new mongoose.Schema(
       type: Number,
       default: 0,
     },
+    status: {
+      type: String,
+      enum: ['ongoing', 'ended'],
+      default: 'ongoing',
+    },
   },
   {
     timestamps: true,
   }
 );
 
-const Conversation = mongoose.model('Conversation', conversationSchema);
+const Training = mongoose.model('Training', trainingSchema);
 
-export default Conversation;
+export default Training;

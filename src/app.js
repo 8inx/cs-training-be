@@ -11,7 +11,7 @@ import connect from '@databases';
 import authRoute from '@routes/auth.route';
 import userRoute from '@routes/user.route';
 import conversationExerciseRoute from '@routes/conversation-exercise.route';
-import conversationRoute from '@routes/conversation.route';
+import trainingRoute from '@routes/training.route';
 import messageExerciseRoute from '@routes/message-exercise.route';
 import errorMiddleware from '@middlewares/error.middleware';
 
@@ -29,7 +29,7 @@ app.use(cookieParser());
 app.use('/auth', authRoute);
 app.use('/user', userRoute);
 app.use('/conversation-exercise', conversationExerciseRoute);
-app.use('/conversation', conversationRoute);
+app.use('/training', trainingRoute);
 app.use('/message-exercise', messageExerciseRoute);
 
 /* errorMiddleware */

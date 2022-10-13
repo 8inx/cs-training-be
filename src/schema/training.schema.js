@@ -2,8 +2,8 @@ import { object, string, number } from 'yup';
 
 const payload = {
   body: object({
-    sessionId: string().required('Missing session id'),
-    userId: string().required('UserId required!'),
+    sessionId: string(),
+    userId: string(),
     meta: object({
       nickname: string(),
       email: string(),
@@ -17,7 +17,7 @@ const payload = {
  *  @openapi
  *  definitions:
  *    conversation:
- *      createConversationSchema:
+ *      createTrainingSchema:
  *        type: object
  *        required:
  *          - sessionId
@@ -42,6 +42,6 @@ const payload = {
  *                type: string
  *                default: 'https://joeschmoe.io/api/v1/jon'
  */
-export const createConversationSchema = object().shape({
+export const createTrainingSchema = object().shape({
   ...payload,
 });

@@ -1,39 +1,57 @@
 import DuplicateKeyError from '@errors/DuplicateKeyError';
 import HttpError from '@errors/HttpError';
 import ConversationExercise from '@models/conversation-exercise.model';
-import Conversation from '@models/conversation.model';
+import Training from '@models/training.model';
 import User from '@models/user.model';
 
+
+const getOneRandomExercise = async (userId) => {
+  const exerciseCount = await ConversationExercise.count();
+  const randomExerciseNum = Math.floor(Math.random() * exerciseCount);
+  const randomExercise = await ConversationExercise.findOne().skip(randomExerciseNum);
+
+  const findTraining = await Training.findOne({
+    userId,
+    sessionId: randomExercise.sessionId,
+    status: 'ongoing',
+  });
+    
+  if (findTraining) {
+    getOneRandomExercise(userId);
+  }
+
+  return randomExercise;
+};
+
 /**
- * Create Conversation
+ * Create Training
  * @param {string} input.sessionId
  * @param {string} input.userId
  * @param {{nickname?:string, email?:string, avatar?:string}} input.meta
- * @returns {object} Conversation
+ * @returns {object} Training
  */
-export const createConversation = async input => {
-  const { sessionId, userId } = input;
-  const findExercise = await ConversationExercise.findOne({ sessionId });
-  if (!findExercise) throw new HttpError('400', 'Invalid sessionId');
-
+export const createTraining = async (input) => {
+  const { userId } = input;
   const findUser = await User.findById(userId);
   if (!findUser) throw new HttpError('400', 'Invalid userId');
 
-  const findConversation = await Conversation.findOne({ sessionId, userId });
-  if (findConversation) throw new DuplicateKeyError('sessionId', 'Conversation already exist');
-
-  const newConversation = await Conversation.create({ ...input });
-  return newConversation;
+  const { meta, sessionId } = await getOneRandomExercise(findUser._id.toString());
+  const newTraining = await Training.create({ 
+    meta,
+    sessionId,
+    userId,
+  });
+  return newTraining;
 };
 
 /**
  * Update Conversation
  * @param {string} id conversationId
  * @param {object} input input body
- * @returns {Conversation}
+ * @returns {Training}
  */
 export const updateConversation = async (id, input) => {
-  const findByIdAndUpdate = await Conversation.findByIdAndUpdate(
+  const findByIdAndUpdate = await Training.findByIdAndUpdate(
     id,
     {
       $set: input,
@@ -48,8 +66,8 @@ export const updateConversation = async (id, input) => {
  * @param {string} id conversationId
  * @returns {Conversation} deleted Conversation
  */
-export const deleteConversation = async id => {
-  const findByIdAndDelete = await Conversation.findByIdAndDelete(id);
+export const deleteTraining = async id => {
+  const findByIdAndDelete = await Training.findByIdAndDelete(id);
   return findByIdAndDelete;
 };
 

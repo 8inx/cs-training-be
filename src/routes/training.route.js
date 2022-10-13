@@ -1,26 +1,26 @@
 import { Router } from 'express';
 
-import { createConversationHandler } from '@controllers/conversation.controller';
+import { createTrainingHandler } from '@controllers/training';
 import { verifyTrainee } from '@middlewares/permission.middleware';
 import validationMiddleware from '@middlewares/validation.middleware';
-import { createConversationSchema } from '@schema/conversation.schema';
+import { createTrainingSchema } from '@schema/training.schema';
 
 const route = Router();
 
 /**
  * @openapi
- * '/conversation':
+ * '/training':
  *  post:
  *    tags:
- *      - conversation
- *    summary: create conversation
+ *      - training
+ *    summary: create/start a training 
  *    requestBody:
  *      description: conversation body
- *      required: true
+ *      required: false
  *      content:
  *        application/json:
  *          schema:
- *            $ref: '#/definitions/conversation/createConversationSchema'
+ *            $ref: '#/definitions/conversation/createTrainingSchema'
  *    responses:
  *      200:
  *        description: 'Success'
@@ -38,6 +38,6 @@ const route = Router();
  *        description: 'Server Error'
  */
 
-route.post('/', validationMiddleware(createConversationSchema), verifyTrainee, createConversationHandler);
+route.post('/', validationMiddleware(createTrainingSchema), verifyTrainee, createTrainingHandler);
 
 export default route;
