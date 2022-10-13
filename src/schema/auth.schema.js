@@ -1,6 +1,6 @@
 import { object } from 'yup';
 
-import { email, firstName, lastName, password } from './user.schema';
+import { email, firstName, lastName, password, role } from './user.schema';
 
 /**
  *  @openapi
@@ -13,6 +13,7 @@ import { email, firstName, lastName, password } from './user.schema';
  *          - password
  *          - firstName
  *          - lastName
+ *          - role
  *        properties:
  *          email:
  *            type: string
@@ -26,6 +27,10 @@ import { email, firstName, lastName, password } from './user.schema';
  *          lastName:
  *            type: string
  *            default: Schwarzenegger
+ *          role:
+ *            type: string
+ *            enum: ['trainee', 'coach', 'admin']
+ *            default: 'trainee'
  */
 
 export const registerSchema = object().shape({
@@ -34,6 +39,7 @@ export const registerSchema = object().shape({
     password,
     firstName,
     lastName,
+    role,
   }),
 });
 
