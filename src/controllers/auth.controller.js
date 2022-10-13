@@ -2,7 +2,9 @@ import { register, login } from '@services/auth.service';
 
 export const registerHandler = async (req, res, next) => {
   try {
-    const { cookie, user } = await register(req.body);
+    const input = req.body;
+    const requesterRole = req.user ? req.user.role : null;
+    const { cookie, user } = await register(input, requesterRole);
     res.setHeader('Set-Cookie', [cookie]);
     res.status(200).json({ data: user, mesage: 'register success' });
   } catch (error) {

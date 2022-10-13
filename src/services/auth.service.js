@@ -5,7 +5,9 @@ import HttpError from '@errors/HttpError';
 import User from '@models/user.model';
 import { createCookie, createToken } from '@utils/utils';
 
-export const register = async input => {
+export const register = async (input, requesterRole) => {
+  if (input.role === 'admin' && requesterRole !== 'admin') throw new HttpError(401, 'Only admin is authorized');
+
   const findUser = await User.findOne({ email: input.email });
   if (findUser) throw new DuplicateKeyError('email', 'Email is already taken');
 
