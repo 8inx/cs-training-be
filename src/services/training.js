@@ -1,8 +1,15 @@
-import DuplicateKeyError from '@errors/DuplicateKeyError';
 import HttpError from '@errors/HttpError';
 import ConversationExercise from '@models/conversation-exercise.model';
+import MessageExercise from '@models/message-exercise.model';
 import Training from '@models/training.model';
 import User from '@models/user.model';
+import firebase from '../utils/firebase';
+import {
+  ref,
+  set,
+  push,
+  runTransaction,
+} from 'firebase/database';
 
 
 const getOneRandomExercise = async (userId) => {
@@ -41,16 +48,41 @@ export const createTraining = async (input) => {
     sessionId,
     userId,
   });
+
+  if(newTraining) {
+    const messages = await MessageExercise.find({ sessionId });
+
+    const channelId = `channels/${newTraining._id.toString()}`;
+    const channelRef = ref(firebase, channelId);
+
+    set(ref(firebase, channelId), {
+      ...newTraining.toObject(),
+    });
+    
+    runTransaction(channelRef, (channel) => {
+      messages.map((message) => {
+        console.log('message', message);
+        if (channel) {
+          if (!channel.exercerisMessage) {
+            channel.exercerisMessage = {};
+          }
+          channel.exercerisMessage[message._id.toString()] = message.toObject();
+        }
+      });
+      return channel
+    });
+  }
+
   return newTraining;
 };
 
 /**
- * Update Conversation
- * @param {string} id conversationId
+ * Update Training
+ * @param {string} id trainingId
  * @param {object} input input body
  * @returns {Training}
  */
-export const updateConversation = async (id, input) => {
+export const updateTraining = async (id, input) => {
   const findByIdAndUpdate = await Training.findByIdAndUpdate(
     id,
     {
@@ -62,9 +94,9 @@ export const updateConversation = async (id, input) => {
 };
 
 /**
- * Delete Conversation
- * @param {string} id conversationId
- * @returns {Conversation} deleted Conversation
+ * Delete Training
+ * @param {string} id trainingId
+ * @returns {Training} deleted Training
  */
 export const deleteTraining = async id => {
   const findByIdAndDelete = await Training.findByIdAndDelete(id);
@@ -72,21 +104,21 @@ export const deleteTraining = async id => {
 };
 
 /**
- * Find Conversation By Id
+ * Find Training By Id
  * @param {string} id conversationId
- * @returns {Conversation}
+ * @returns {Training}
  */
-export const findConversationById = async id => {
-  const findById = await Conversation.findById(id);
+export const findTrainingById = async id => {
+  const findById = await Training.findById(id);
   return findById;
 };
 
 /**
- * Find User Conversations
+ * Find User Trainings
  * @param {string} userId
- * @returns {Conversation}
+ * @returns {Training}
  */
-export const findUserConversations = async userId => {
+export const findUserTrainings = async userId => {
   const find = await Conversation.find({ userId });
   return find;
 };

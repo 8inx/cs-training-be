@@ -1,9 +1,21 @@
 import { Router } from 'express';
 
-import { createTrainingHandler } from '@controllers/training';
-import { verifyTrainee } from '@middlewares/permission.middleware';
+import {
+    createTrainingHandler,
+    updateTrainingHandler,
+    deleteTrainingHandler,
+    findTrainingByIdHandler,
+    findTrainingByUserIdHandler,
+} from '@controllers/training';
+import { verifyTrainee, verifyCoach } from '@middlewares/permission.middleware';
 import validationMiddleware from '@middlewares/validation.middleware';
-import { createTrainingSchema } from '@schema/training.schema';
+import {
+    createTrainingSchema,
+    updateTrainingSchema,
+    deleteTrainingSchema,
+    findTrainingByIdSchema,
+    findTrainingByUserIdSchema,
+} from '@schema/training.schema';
 
 const route = Router();
 
@@ -14,13 +26,6 @@ const route = Router();
  *    tags:
  *      - training
  *    summary: create/start a training 
- *    requestBody:
- *      description: conversation body
- *      required: false
- *      content:
- *        application/json:
- *          schema:
- *            $ref: '#/definitions/conversation/createTrainingSchema'
  *    responses:
  *      200:
  *        description: 'Success'
@@ -39,5 +44,40 @@ const route = Router();
  */
 
 route.post('/', validationMiddleware(createTrainingSchema), verifyTrainee, createTrainingHandler);
+
+/**
+ * @openapi
+ * '/training/{trainingId}':
+ *  put:
+ *    tags:
+ *      - training
+ *    summary: update training
+ *    parameters:
+ *    - name: trainingId
+ *      in: path
+ *      type: string
+ *      description: session id
+ *      required: true
+ *    requestBody:
+ *      description: training body
+ *      required: true
+ *      content:
+ *        application/json:
+ *          schema:
+ *            $ref: '#/definitions/training/updateTrainingSchema'
+ *    responses:
+ *      200:
+ *        description: 'Success'
+ *      400:
+ *        description: 'Bad Request'
+ *      404:
+ *        description: 'Not Found'
+ *      500:
+ *        description: 'Server Error'
+ */
+route.put('/:trainingId', validationMiddleware(updateTrainingSchema), updateTrainingHandler);
+route.delete('/:trainingId', validationMiddleware(deleteTrainingSchema), deleteTrainingHandler);
+route.get('/:trainingId', validationMiddleware(findTrainingByIdSchema), findTrainingByIdHandler);
+route.get('/user/:userId', validationMiddleware(findTrainingByUserIdSchema), findTrainingByUserIdHandler);
 
 export default route;

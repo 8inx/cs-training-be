@@ -28,5 +28,6 @@ Cookie: {{token}}
         "nickame": "John Doe",
         "email": "john@email.com",
         "avatar": ""
-    }
+    },
+    status: 'ended',
 }

@@ -4,7 +4,6 @@ const trainingSchema = new mongoose.Schema(
   {
     sessionId: {
       type: String,
-      unique: true,
       required: true,
     },
     meta: {

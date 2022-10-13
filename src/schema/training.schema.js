@@ -1,5 +1,11 @@
 import { object, string, number } from 'yup';
 
+const trainingParams = {
+  params: object({
+    trainingId: string().required('training id is required'),
+  }),
+}
+
 const payload = {
   body: object({
     sessionId: string(),
@@ -10,38 +16,44 @@ const payload = {
       avatar: string(),
     }),
     currentSegment: number(),
+    status: string(),
   }),
 };
+
+export const createTrainingSchema = object().shape({});
 
 /**
  *  @openapi
  *  definitions:
- *    conversation:
- *      createTrainingSchema:
+ *    training:
+ *      updateTrainingSchema:
  *        type: object
  *        required:
- *          - sessionId
+ *          - trainingId
  *          - userId
  *        properties:
- *          sessionId:
+ *          trainingId:
  *            type: string
- *            default: session_f622e5d1-3464-40f8-a70a-6514ffc5b69f
- *          userId:
+ *            default: trainingId here
+ *          status:
  *            type: string
- *            default: 6346b13f671f9c7dfc3c99ba
- *          meta:
- *            type: object
- *            properties:
- *              nickname:
- *                type: string
- *                default: John Doe
- *              email:
- *                type: string
- *                default: john@email.com
- *              avatar:
- *                type: string
- *                default: 'https://joeschmoe.io/api/v1/jon'
+ *            default: ended
  */
-export const createTrainingSchema = object().shape({
+export const updateTrainingSchema = object().shape({
+  ...trainingParams,
   ...payload,
+});
+
+export const deleteTrainingSchema = object().shape({
+  ...trainingParams,
+});
+
+export const findTrainingByIdSchema = object().shape({
+  ...trainingParams,
+})
+
+export const findTrainingByUserIdSchema = object().shape({
+  params: object({
+    userId: string(),
+  }),
 });

@@ -3,7 +3,6 @@ import mongoose from 'mongoose';
 const conversationExerciseSchema = new mongoose.Schema({
   sessionId: {
     type: String,
-    unique: true,
     required: true,
   },
   meta: {
