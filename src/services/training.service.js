@@ -5,6 +5,7 @@ import Training from '@models/training.model';
 import User from '@models/user.model';
 import { ref, runTransaction, set } from 'firebase/database';
 import firebase from '@utils/firebase';
+import logger from '@utils/logger';
 
 const getOneRandomExercise = async userId => {
   const exerciseCount = await ConversationExercise.count();
@@ -34,10 +35,13 @@ export const createTraining = async input => {
   if (!findUser) throw new HttpError('400', 'Invalid userId');
 
   const { meta, sessionId } = await getOneRandomExercise(userId);
+  const lastMessage = await MessageExercise.find({ sessionId }).sort({ segmentId: -1 }).limit(1);
+
   const newTraining = await Training.create({
     meta,
     sessionId,
     userId,
+    maxSegment: lastMessage[0].segmentId,
   });
 
   if (newTraining) {
@@ -52,7 +56,7 @@ export const createTraining = async input => {
 
     runTransaction(channelRef, channel => {
       messages.map(message => {
-        console.log('message', message);
+        logger.info('message', message);
         if (channel) {
           if (!channel.exercerisMessage) {
             channel.exercerisMessage = {};
