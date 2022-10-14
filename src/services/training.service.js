@@ -111,29 +111,44 @@ export const findTrainingById = async id => {
 /**
  * Find User Trainings
  * @param {string} userId
+ * @param {{page?:number, size?:number}} [query]
  * @returns {Training}
  */
-export const findUserTrainings = async userId => {
-  const find = await Training.find({ userId });
+export const findUserTrainings = async (userId, query) => {
+  const { size = 20, page = 1 } = query;
+  const limit = size;
+  const skip = Math.abs(page - 1) * limit;
+
+  const find = await Training.find({ userId }).skip(skip).limit(limit);
   return find;
 };
 
 /**
  * Find User Ongoing Trainings
  * @param {string} userId
+ * @param {{page?:number, size?:number}} [query]
  * @returns {Training}
  */
-export const findUsersOngoingTrainings = async userId => {
-  const findOngoing = await Training.find({ userId, status: 'ongoing' });
+export const findUsersOngoingTrainings = async (userId, query) => {
+  const { size = 20, page = 1 } = query;
+  const limit = size;
+  const skip = Math.abs(page - 1) * limit;
+
+  const findOngoing = await Training.find({ userId, status: 'ongoing' }).skip(skip).limit(limit);
   return findOngoing;
 };
 
 /**
  * Find User Ended Trainings
  * @param {string} userId
+ * @param {{page?:number, size?:number}} [query]
  * @returns {Training}
  */
-export const findUsersEndedTrainings = async userId => {
-  const findEnded = await Training.find({ userId, status: 'ended' });
+export const findUsersEndedTrainings = async (userId, query) => {
+  const { size = 20, page = 1 } = query;
+  const limit = size;
+  const skip = Math.abs(page - 1) * limit;
+
+  const findEnded = await Training.find({ userId, status: 'ended' }).skip(skip).limit(limit);
   return findEnded;
 };
