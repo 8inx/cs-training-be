@@ -4,13 +4,15 @@ import {
   deleteTraining,
   findTrainingById,
   findUserTrainings,
-} from '@services/training';
+  findUsersOngoingTrainings,
+  findUsersEndedTrainings,
+} from '@services/training.service';
 
 export const createTrainingHandler = async (req, res, next) => {
   try {
     const input = {
-      userId: req.user._id.toString(),
-      ...req.body
+      userId: req.user._id,
+      ...req.body,
     };
     const newTraining = await createTraining(input);
     res.status(200).json({ data: newTraining, message: 'create success' });
@@ -54,6 +56,26 @@ export const findTrainingByUserIdHandler = async (req, res, next) => {
     const userId = req.params.userId;
     const trainings = await findUserTrainings(userId);
     res.status(200).json({ data: trainings, message: 'find success' });
+  } catch (error) {
+    next(error);
+  }
+};
+
+export const findUsersOngoingTrainingsHandler = async (req, res, next) => {
+  try {
+    const userId = req.params.userId;
+    const trainings = await findUsersOngoingTrainings(userId);
+    res.status(200).json({ data: trainings, message: 'find ongoing trainings success' });
+  } catch (error) {
+    next(error);
+  }
+};
+
+export const findUsersEndedTrainingsHandler = async (req, res, next) => {
+  try {
+    const userId = req.params.userId;
+    const trainings = await findUsersEndedTrainings(userId);
+    res.status(200).json({ data: trainings, message: 'find ended trainings success' });
   } catch (error) {
     next(error);
   }

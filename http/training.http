@@ -13,7 +13,6 @@ Content-Type: application/json
 @baseURL = http://localhost:{{$dotenv PORT}}/training
 @token = {{login.response.headers.Set-Cookie}}
 @sessionId = session_f622e5d1-3464-40f8-a70a-6514ffc5b69f
-@userId = 6346b13f671f9c7dfc3c99ba
 
 ### Create Training
 
@@ -21,13 +20,33 @@ POST {{baseURL}}
 Content-Type: application/json
 Cookie: {{token}}
 
-{
-    "sessionId": "{{sessionId}}",
-    "userId": "{{userId}}",
-    "meta": {
-        "nickame": "John Doe",
-        "email": "john@email.com",
-        "avatar": ""
-    },
-    status: 'ended',
-}
+
+
+
+### Find Training By Id
+@trainingId = 634958ef63349efcd70182a2
+GET {{baseURL}}/{{trainingId}}
+
+
+
+
+### Find Users Trainings By Id
+@userId = 634951162681a66c5be77031
+GET {{baseURL}}/user/{{userId}}
+
+
+
+### Find users trainings - ongoing
+@userId = 634951162681a66c5be77031
+
+GET {{baseURL}}/user/{{userId}}/ongoing
+Content-Type: application/json
+Cookie: {{token}}
+
+
+### Find users trainings - ended
+@userId = 634951162681a66c5be77031
+
+GET {{baseURL}}/user/{{userId}}/ended
+Content-Type: application/json
+Cookie: {{token}}

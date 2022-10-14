@@ -4,7 +4,7 @@ const trainingParams = {
   params: object({
     trainingId: string().required('training id is required'),
   }),
-}
+};
 
 const payload = {
   body: object({
@@ -50,9 +50,21 @@ export const deleteTrainingSchema = object().shape({
 
 export const findTrainingByIdSchema = object().shape({
   ...trainingParams,
-})
+});
 
 export const findTrainingByUserIdSchema = object().shape({
+  params: object({
+    userId: string(),
+  }),
+});
+
+export const findUsersOngoingTrainingsSchema = object().shape({
+  params: object({
+    userId: string(),
+  }),
+});
+
+export const findUsersEndedTrainingsSchema = object().shape({
   params: object({
     userId: string(),
   }),
