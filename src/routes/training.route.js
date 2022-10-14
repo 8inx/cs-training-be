@@ -2,23 +2,23 @@ import { Router } from 'express';
 
 import {
   createTrainingHandler,
-  updateTrainingHandler,
   deleteTrainingHandler,
   findTrainingByIdHandler,
   findTrainingByUserIdHandler,
-  findUsersOngoingTrainingsHandler,
   findUsersEndedTrainingsHandler,
+  findUsersOngoingTrainingsHandler,
+  updateTrainingHandler,
 } from '@controllers/training.controller';
-import { verifyAuthorization, verifyTrainee } from '@middlewares/permission.middleware';
+import { verifyAdmin, verifyTrainee } from '@middlewares/permission.middleware';
 import validationMiddleware from '@middlewares/validation.middleware';
 import {
   createTrainingSchema,
-  updateTrainingSchema,
   deleteTrainingSchema,
   findTrainingByIdSchema,
   findTrainingByUserIdSchema,
   findUsersEndedTrainingsSchema,
   findUsersOngoingTrainingsSchema,
+  updateTrainingSchema,
 } from '@schema/training.schema';
 
 const route = Router();
@@ -104,7 +104,7 @@ route.put('/:trainingId', validationMiddleware(updateTrainingSchema), updateTrai
  *      500:
  *        description: 'Server Error'
  */
-route.delete('/:trainingId', validationMiddleware(deleteTrainingSchema), verifyTrainee, deleteTrainingHandler);
+route.delete('/:trainingId', validationMiddleware(deleteTrainingSchema), verifyAdmin, deleteTrainingHandler);
 
 /**
  * @openapi
@@ -154,12 +154,7 @@ route.get('/:trainingId', validationMiddleware(findTrainingByIdSchema), findTrai
  *      500:
  *        description: 'Server Error'
  */
-route.get(
-  '/user/:userId',
-  validationMiddleware(findTrainingByUserIdSchema),
-  verifyAuthorization,
-  findTrainingByUserIdHandler
-);
+route.get('/user/:userId', validationMiddleware(findTrainingByUserIdSchema), findTrainingByUserIdHandler);
 
 /**
  * @openapi
@@ -187,7 +182,6 @@ route.get(
 route.get(
   '/user/:userId/ongoing',
   validationMiddleware(findUsersOngoingTrainingsSchema),
-  verifyAuthorization,
   findUsersOngoingTrainingsHandler
 );
 
@@ -214,10 +208,5 @@ route.get(
  *      500:
  *        description: 'Server Error'
  */
-route.get(
-  '/user/:userId/ended',
-  validationMiddleware(findUsersEndedTrainingsSchema),
-  verifyAuthorization,
-  findUsersEndedTrainingsHandler
-);
+route.get('/user/:userId/ended', validationMiddleware(findUsersEndedTrainingsSchema), findUsersEndedTrainingsHandler);
 export default route;
