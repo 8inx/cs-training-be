@@ -58,10 +58,10 @@ export const createTraining = async input => {
       messages.map(message => {
         logger.info('message', message);
         if (channel) {
-          if (!channel.exercerisMessage) {
-            channel.exercerisMessage = {};
+          if (!channel.exerceriseMessages) {
+            channel.exerceriseMessages = {};
           }
-          channel.exercerisMessage[message._id.toString()] = message.toObject();
+          channel.exerceriseMessages[message._id.toString()] = message.toObject();
         }
       });
       return channel;
