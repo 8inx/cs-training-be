@@ -6,11 +6,11 @@ POST {{ baseURL }}/register
 Content-Type: application/json
 
 {
-    "email": "example@email.com",
+    "email": "coach@email.com",
     "password": "password",
     "firstName": "Tony",
     "lastName": "Stark",
-    "role": "trainee"
+    "role": "coach"
 }
 
 

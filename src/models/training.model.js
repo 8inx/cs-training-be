@@ -15,6 +15,10 @@ const trainingSchema = new mongoose.Schema(
       type: String,
       required: true,
     },
+    maxSegment: {
+      type: Number,
+      default: 0,
+    },
     currentSegment: {
       type: Number,
       default: 0,

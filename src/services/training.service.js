@@ -3,16 +3,11 @@ import ConversationExercise from '@models/conversation-exercise.model';
 import MessageExercise from '@models/message-exercise.model';
 import Training from '@models/training.model';
 import User from '@models/user.model';
-import firebase from '../utils/firebase';
-import {
-  ref,
-  set,
-  push,
-  runTransaction,
-} from 'firebase/database';
+import { ref, runTransaction, set } from 'firebase/database';
+import firebase from '@utils/firebase';
+import logger from '@utils/logger';
 
-
-const getOneRandomExercise = async (userId) => {
+const getOneRandomExercise = async userId => {
   const exerciseCount = await ConversationExercise.count();
   const randomExerciseNum = Math.floor(Math.random() * exerciseCount);
   const randomExercise = await ConversationExercise.findOne().skip(randomExerciseNum);
@@ -20,9 +15,8 @@ const getOneRandomExercise = async (userId) => {
   const findTraining = await Training.findOne({
     userId,
     sessionId: randomExercise.sessionId,
-    status: 'ongoing',
   });
-    
+
   if (findTraining) {
     getOneRandomExercise(userId);
   }
@@ -32,24 +26,25 @@ const getOneRandomExercise = async (userId) => {
 
 /**
  * Create Training
- * @param {string} input.sessionId
  * @param {string} input.userId
- * @param {{nickname?:string, email?:string, avatar?:string}} input.meta
  * @returns {object} Training
  */
-export const createTraining = async (input) => {
+export const createTraining = async input => {
   const { userId } = input;
   const findUser = await User.findById(userId);
   if (!findUser) throw new HttpError('400', 'Invalid userId');
 
-  const { meta, sessionId } = await getOneRandomExercise(findUser._id.toString());
-  const newTraining = await Training.create({ 
+  const { meta, sessionId } = await getOneRandomExercise(userId);
+  const lastMessage = await MessageExercise.find({ sessionId }).sort({ segmentId: -1 }).limit(1);
+
+  const newTraining = await Training.create({
     meta,
     sessionId,
     userId,
+    maxSegment: lastMessage[0].segmentId,
   });
 
-  if(newTraining) {
+  if (newTraining) {
     const messages = await MessageExercise.find({ sessionId });
 
     const channelId = `channels/${newTraining._id.toString()}`;
@@ -58,10 +53,10 @@ export const createTraining = async (input) => {
     set(ref(firebase, channelId), {
       ...newTraining.toObject(),
     });
-    
-    runTransaction(channelRef, (channel) => {
-      messages.map((message) => {
-        console.log('message', message);
+
+    runTransaction(channelRef, channel => {
+      messages.map(message => {
+        logger.info('message', message);
         if (channel) {
           if (!channel.exercerisMessage) {
             channel.exercerisMessage = {};
@@ -69,7 +64,7 @@ export const createTraining = async (input) => {
           channel.exercerisMessage[message._id.toString()] = message.toObject();
         }
       });
-      return channel
+      return channel;
     });
   }
 
@@ -105,7 +100,7 @@ export const deleteTraining = async id => {
 
 /**
  * Find Training By Id
- * @param {string} id conversationId
+ * @param {string} id
  * @returns {Training}
  */
 export const findTrainingById = async id => {
@@ -116,9 +111,44 @@ export const findTrainingById = async id => {
 /**
  * Find User Trainings
  * @param {string} userId
+ * @param {{page?:number, size?:number}} [query]
  * @returns {Training}
  */
-export const findUserTrainings = async userId => {
-  const find = await Conversation.find({ userId });
+export const findUserTrainings = async (userId, query) => {
+  const { size = 20, page = 1 } = query;
+  const limit = size;
+  const skip = Math.abs(page - 1) * limit;
+
+  const find = await Training.find({ userId }).skip(skip).limit(limit);
   return find;
+};
+
+/**
+ * Find User Ongoing Trainings
+ * @param {string} userId
+ * @param {{page?:number, size?:number}} [query]
+ * @returns {Training}
+ */
+export const findUsersOngoingTrainings = async (userId, query) => {
+  const { size = 20, page = 1 } = query;
+  const limit = size;
+  const skip = Math.abs(page - 1) * limit;
+
+  const findOngoing = await Training.find({ userId, status: 'ongoing' }).skip(skip).limit(limit);
+  return findOngoing;
+};
+
+/**
+ * Find User Ended Trainings
+ * @param {string} userId
+ * @param {{page?:number, size?:number}} [query]
+ * @returns {Training}
+ */
+export const findUsersEndedTrainings = async (userId, query) => {
+  const { size = 20, page = 1 } = query;
+  const limit = size;
+  const skip = Math.abs(page - 1) * limit;
+
+  const findEnded = await Training.find({ userId, status: 'ended' }).skip(skip).limit(limit);
+  return findEnded;
 };

@@ -13,7 +13,7 @@ const route = Router();
  *  get:
  *    tags:
  *      - message-exercise
- *    summary: Find conversation exercise by id
+ *    summary: Find message exercise by id
  *    parameters:
  *    - name: id
  *      in: path
