@@ -14,9 +14,15 @@ export const registerHandler = async (req, res, next) => {
 
 export const loginHandler = async (req, res, next) => {
   try {
-    const { cookie, user } = await login(req.body);
+    const { cookie, user, token } = await login(req.body);
     res.setHeader('Set-Cookie', [cookie]);
-    res.status(200).json({ data: user, mesage: 'login success' });
+    res.status(200).json({
+      data: {
+        user,
+        token,
+      },
+      mesage: 'login success',
+    });
   } catch (error) {
     next(error);
   }

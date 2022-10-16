@@ -32,5 +32,5 @@ export const login = async input => {
   const token = createToken(user);
   const cookie = createCookie(token);
 
-  return { cookie, user };
+  return { cookie, user, token };
 };
