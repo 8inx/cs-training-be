@@ -87,7 +87,7 @@ export const getMessagesInConversation = async session_id => {
       };
     },
     {
-      segmentId: 0,
+      segmentId: 1,
       lastFrom: '',
     }
   );

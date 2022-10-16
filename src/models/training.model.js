@@ -17,11 +17,11 @@ const trainingSchema = new mongoose.Schema(
     },
     maxSegment: {
       type: Number,
-      default: 0,
+      default: 1,
     },
     currentSegment: {
       type: Number,
-      default: 0,
+      default: 1,
     },
     status: {
       type: String,
