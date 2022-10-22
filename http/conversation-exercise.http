@@ -20,7 +20,7 @@ Content-Type: application/json
 Cookie: {{token}}
 
 {
-    "max": 10,
+    "max": 25,
     "dateStart": "2019-12-31T16:00:30.000Z",
     "dateEnd": "2022-12-31T16:22:30.000Z"
 }

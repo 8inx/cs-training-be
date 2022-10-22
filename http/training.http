@@ -11,14 +11,14 @@ Content-Type: application/json
 
 ###
 @baseURL = http://localhost:{{$dotenv PORT}}/training
-@token = {{login.response.headers.Set-Cookie}}
-@userId = {{login.response.body.data._id}}
+@token = {{login.response.body.data.token.token}}
+@userId = {{login.response.body.data.user._id}}
 
 ### Create Training
 
 POST {{baseURL}}
 Content-Type: application/json
-Cookie: {{token}}
+Authorization: Bearer {{token}}
 
 
 

@@ -115,11 +115,11 @@ export const findTrainingById = async id => {
  * @returns {Training}
  */
 export const findUserTrainings = async (userId, query) => {
-  const { size = 20, page = 1 } = query;
+  const { size = 20, page = 1, createdAt } = query;
   const limit = size;
   const skip = Math.abs(page - 1) * limit;
 
-  const find = await Training.find({ userId }).skip(skip).limit(limit);
+  const find = await Training.find({ userId }).sort({ createdAt }).skip(skip).limit(limit);
   return find;
 };
 
@@ -130,11 +130,11 @@ export const findUserTrainings = async (userId, query) => {
  * @returns {Training}
  */
 export const findUsersOngoingTrainings = async (userId, query) => {
-  const { size = 20, page = 1 } = query;
+  const { size = 20, page = 1, createdAt = 1 } = query;
   const limit = size;
   const skip = Math.abs(page - 1) * limit;
 
-  const findOngoing = await Training.find({ userId, status: 'ongoing' }).skip(skip).limit(limit);
+  const findOngoing = await Training.find({ userId, status: 'ongoing' }).sort({ createdAt }).skip(skip).limit(limit);
   return findOngoing;
 };
 
@@ -145,10 +145,10 @@ export const findUsersOngoingTrainings = async (userId, query) => {
  * @returns {Training}
  */
 export const findUsersEndedTrainings = async (userId, query) => {
-  const { size = 20, page = 1 } = query;
+  const { size = 20, page = 1, createdAt = 1 } = query;
   const limit = size;
   const skip = Math.abs(page - 1) * limit;
 
-  const findEnded = await Training.find({ userId, status: 'ended' }).skip(skip).limit(limit);
+  const findEnded = await Training.find({ userId, status: 'ended' }).sort({ createdAt }).skip(skip).limit(limit);
   return findEnded;
 };
