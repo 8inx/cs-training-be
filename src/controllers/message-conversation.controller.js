@@ -1,4 +1,10 @@
-import { findById, findBySegment, findBySessionId } from '@services/message-exercise.service';
+import {
+  findById,
+  findBySegment,
+  findBySegmentFromOperator,
+  findBySegmentFromUser,
+  findBySessionId,
+} from '@services/message-exercise.service';
 
 export const findByIdHandler = async (req, res, next) => {
   try {
@@ -24,6 +30,26 @@ export const findBySegmentHandler = async (req, res, next) => {
   try {
     const { sessionId, segmentId } = req.params;
     const findSegment = await findBySegment(sessionId, segmentId);
+    res.status(200).json({ data: findSegment, message: 'find by segment id' });
+  } catch (error) {
+    next(error);
+  }
+};
+
+export const findBySegmentFromUserHandler = async (req, res, next) => {
+  try {
+    const { sessionId, segmentId } = req.params;
+    const findSegment = await findBySegmentFromUser(sessionId, segmentId);
+    res.status(200).json({ data: findSegment, message: 'find by segment id' });
+  } catch (error) {
+    next(error);
+  }
+};
+
+export const findBySegmentFromOperatorHandler = async (req, res, next) => {
+  try {
+    const { sessionId, segmentId } = req.params;
+    const findSegment = await findBySegmentFromOperator(sessionId, segmentId);
     res.status(200).json({ data: findSegment, message: 'find by segment id' });
   } catch (error) {
     next(error);

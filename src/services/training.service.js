@@ -3,9 +3,11 @@ import ConversationExercise from '@models/conversation-exercise.model';
 import MessageExercise from '@models/message-exercise.model';
 import Training from '@models/training.model';
 import User from '@models/user.model';
-import { ref, runTransaction, set } from 'firebase/database';
 import firebase from '@utils/firebase';
 import logger from '@utils/logger';
+import { ref, set, update } from 'firebase/database';
+import { findBySegmentFromUser } from './message-exercise.service';
+import { insertManyMessage } from './message.service';
 
 const getOneRandomExercise = async userId => {
   const exerciseCount = await ConversationExercise.count();
@@ -45,27 +47,28 @@ export const createTraining = async input => {
   });
 
   if (newTraining) {
-    const messages = await MessageExercise.find({ sessionId });
+    const training = newTraining.toObject();
+    const channelId = `channels/${training._id.toString()}`;
 
-    const channelId = `channels/${newTraining._id.toString()}`;
-    const channelRef = ref(firebase, channelId);
-
-    set(ref(firebase, channelId), {
-      ...newTraining.toObject(),
+    // create firebase training instance
+    await set(ref(firebase, channelId), {
+      ...training,
     });
 
-    runTransaction(channelRef, channel => {
-      messages.map(message => {
-        logger.info('message', message);
-        if (channel) {
-          if (!channel.exerceriseMessages) {
-            channel.exerceriseMessages = {};
-          }
-          channel.exerceriseMessages[message._id.toString()] = message.toObject();
-        }
-      });
-      return channel;
-    });
+    // pick user messages with starting segment;
+    const messagesExercises = await findBySegmentFromUser(training.sessionId, training.currentSegment);
+    logger.info({ messagesExercises });
+    // insert many message
+    await insertManyMessage(
+      messagesExercises.map(m => ({
+        trainingId: training._id,
+        segmentId: m.segmentId,
+        userId: m.userId,
+        from: m.from,
+        type: m.type,
+        content: m.content,
+      }))
+    );
   }
 
   return newTraining;
@@ -85,6 +88,14 @@ export const updateTraining = async (id, input) => {
     },
     { new: true }
   );
+
+  const training = findByIdAndUpdate.toObject();
+  const channelId = `channels/${findByIdAndUpdate._id.toString()}`;
+
+  await update(ref(firebase, channelId), {
+    ...training,
+  });
+
   return findByIdAndUpdate;
 };
 
@@ -105,7 +116,7 @@ export const deleteTraining = async id => {
  */
 export const findTrainingById = async id => {
   const findById = await Training.findById(id);
-  return findById;
+  return findById.toObject();
 };
 
 /**

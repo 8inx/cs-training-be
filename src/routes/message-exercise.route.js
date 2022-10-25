@@ -1,5 +1,7 @@
 import {
   findByIdHandler,
+  findBySegmentFromOperatorHandler,
+  findBySegmentFromUserHandler,
   findBySegmentHandler,
   findBySessionIdHandler,
 } from '@controllers/message-conversation.controller';
@@ -89,5 +91,65 @@ route.get('/session/:sessionId', findBySessionIdHandler);
  */
 
 route.get('/session/:sessionId/segment/:segmentId', findBySegmentHandler);
+
+/**
+ * @openapi
+ * '/message-exercise/session/{sessionId}/segment/{segmentId}/user':
+ *  get:
+ *    tags:
+ *      - message-exercise
+ *    summary: Find message exercise by segment from user
+ *    parameters:
+ *    - name: sessionId
+ *      in: path
+ *      type: string
+ *      description: message session id
+ *      required: true
+ *    - name: segmentId
+ *      in: path
+ *      type: string
+ *      description: message segment id
+ *      required: true
+ *    responses:
+ *      200:
+ *        description: 'Success'
+ *      400:
+ *        description: 'Bad Request'
+ *      404:
+ *        description: 'Not Found'
+ *      500:
+ *        description: 'Server Error'
+ */
+route.get('/session/:sessionId/segment/:segmentId/user', findBySegmentFromUserHandler);
+
+/**
+ * @openapi
+ * '/message-exercise/session/{sessionId}/segment/{segmentId}/operator':
+ *  get:
+ *    tags:
+ *      - message-exercise
+ *    summary: Find message exercise by segment from operator
+ *    parameters:
+ *    - name: sessionId
+ *      in: path
+ *      type: string
+ *      description: message session id
+ *      required: true
+ *    - name: segmentId
+ *      in: path
+ *      type: string
+ *      description: message segment id
+ *      required: true
+ *    responses:
+ *      200:
+ *        description: 'Success'
+ *      400:
+ *        description: 'Bad Request'
+ *      404:
+ *        description: 'Not Found'
+ *      500:
+ *        description: 'Server Error'
+ */
+route.get('/session/:sessionId/segment/:segmentId/operator', findBySegmentFromOperatorHandler);
 
 export default route;

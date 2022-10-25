@@ -21,7 +21,7 @@ const trainingSchema = new mongoose.Schema(
     },
     currentSegment: {
       type: Number,
-      default: 0,
+      default: 1,
     },
     status: {
       type: String,
