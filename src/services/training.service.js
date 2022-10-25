@@ -1,11 +1,12 @@
 import HttpError from '@errors/HttpError';
 import ConversationExercise from '@models/conversation-exercise.model';
 import MessageExercise from '@models/message-exercise.model';
+import Message from '@models/message.model';
 import Training from '@models/training.model';
 import User from '@models/user.model';
-import { ref, runTransaction, set } from 'firebase/database';
 import firebase from '@utils/firebase';
 import logger from '@utils/logger';
+import { onValue, ref, runTransaction, set, remove } from 'firebase/database';
 
 const getOneRandomExercise = async userId => {
   const exerciseCount = await ConversationExercise.count();
@@ -69,6 +70,42 @@ export const createTraining = async input => {
   }
 
   return newTraining;
+};
+
+export const endTraining = async trainingId => {
+  const findByIdAndUpdate = await Training.findByIdAndUpdate(
+    trainingId,
+    {
+      $set: { status: 'ended' },
+    },
+    { new: true }
+  );
+
+  if (findByIdAndUpdate) {
+    const channelId = `channels/${trainingId}/thread`;
+    const threadRef = ref(firebase, channelId);
+
+    const getMessagesPromise = () =>
+      new Promise(resolve => {
+        return onValue(
+          threadRef,
+          snapshots => {
+            let messagesFromFirestore = [];
+            snapshots.forEach(childSnapshots => {
+              messagesFromFirestore = [...messagesFromFirestore, { trainingId, ...childSnapshots.val() }];
+            });
+            resolve(messagesFromFirestore);
+          },
+          { onlyOnce: true }
+        );
+      });
+    const messages = await getMessagesPromise();
+    await Message.insertMany(messages);
+    // delete ongoing training from firebase
+    await remove(ref(firebase, `channels/${trainingId}`));
+  }
+
+  return findByIdAndUpdate._doc;
 };
 
 /**

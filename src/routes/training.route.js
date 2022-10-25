@@ -3,13 +3,14 @@ import { Router } from 'express';
 import {
   createTrainingHandler,
   deleteTrainingHandler,
+  endTrainingHandler,
   findTrainingByIdHandler,
   findTrainingByUserIdHandler,
   findUsersEndedTrainingsHandler,
   findUsersOngoingTrainingsHandler,
   updateTrainingHandler,
 } from '@controllers/training.controller';
-import { verifyAdmin, verifyTrainee } from '@middlewares/permission.middleware';
+import { verifyAdmin, verifyCoach, verifyTrainee } from '@middlewares/permission.middleware';
 import validationMiddleware from '@middlewares/validation.middleware';
 import {
   createTrainingSchema,
@@ -48,6 +49,37 @@ const route = Router();
  */
 
 route.post('/', validationMiddleware(createTrainingSchema), verifyTrainee, createTrainingHandler);
+
+/**
+ * @openapi
+ * '/training/{trainingId}/end':
+ *  post:
+ *    tags:
+ *      - training
+ *    summary: end a training
+ *    parameters:
+ *    - name: trainingId
+ *      in: path
+ *      type: string
+ *      description: trainingId
+ *      required: true
+ *    responses:
+ *      200:
+ *        description: 'Success'
+ *      400:
+ *        description: 'Bad Request'
+ *      401:
+ *        description: 'Unauthorized'
+ *      403:
+ *        description: 'Request Forbidden'
+ *      404:
+ *        description: 'Not Found'
+ *      409:
+ *        description: 'Request Conflict'
+ *      500:
+ *        description: 'Server Error'
+ */
+route.post('/:trainingId/end', verifyCoach, endTrainingHandler);
 
 /**
  * @openapi
