@@ -1,0 +1,61 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta http-equiv="X-UA-Compatible" content="IE=edge">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Email Invite</title>
+    <link rel="preconnect" href="https://fonts.googleapis.com">
+    <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+    <link href="https://fonts.googleapis.com/css2?family=Poppins:wght@400;500;600;700&display=swap" rel="stylesheet">
+</head>
+<body style="margin: 0; color: #4a4a4a; font-family: 'Poppins', sans-serif; font-size: 15px;">
+    <table border="0" cellpadding="0" cellspacing="0" width="100%" style="padding:40px 0 0 0;">
+        <tr>
+            <td>
+                <table align="center" border="0" cellpadding="0" cellspacing="0" width="600" bgcolor="#ffffff" style="border-radius:5px;-webkit-border-radius:5px;-moz-border-radius:5px;">
+                    <tr>
+                        <td align="center" style="padding: 24px 0; background-color: #f2f4f6;">
+                            <span style="display: block; width: 100%; text-align: center; font-size: 1.8rem; font-weight: 700; color: #4a4a4a;">CS-TRAINING</span>
+                        </td>
+                    </tr>
+                    <tr>
+                        <td style="padding: 30px 20px 30px 20px;">
+                            <table border="0" cellpadding="0" cellspacing="0" width="100%" style="">
+                                <tr>
+                                    <td style="font-weight: 600; font-size: 1.4rem; color: #2f313a;"> 
+                                        <b>Hi!</b>
+                                    </td>
+                                </tr>
+                                <tr>
+                                    <td style="padding: 20px 0 20px 0; line-height: 1.96;">Our company has invited you to be a {{role}} in our CS-Training Application. Use the button below to create your account and get started.</td>
+                                </tr>
+                                <tr>
+                                    <td align="center" style="padding: 16px 0;">
+                                        <a href="{{registrationUrl}}" style="display: inline-block; margin: 0 auto; padding: 10px 20px; border-radius: 6px; background-color: #3b6cd1; text-decoration: none; font-weight: 500; color: #fff;">Create account</a>
+                                    </td>
+                                </tr>
+                                <tr>
+                                    <td style="padding: 20px 0 20px 0; line-height: 1.96;">If you have any questions, you can reply to this email and it will go right away to them.</td>
+                                </tr>
+                                <tr>
+                                    <td style="padding: 20px 0 20px 0; line-height: 1.96;">
+                                        <span style="font-size: 1.1rem;">Welcome aboard,</span><br/>
+                                        <span style="font-size: 1.1rem;">Company CEO</span>
+                                    </td>
+                                </tr>
+                                <tr>
+                                    <td style="padding: 20px 0 20px 0;">
+                                        <small>If your having a trouble with the button above, copy and paste the URL below into your web browser.</small><br/>
+                                        <small>{{registrationUrl}}</small>
+                                    </td>
+                                </tr>
+                            </table>
+                        </td>
+                    </tr>
+                </table>
+            </td>
+        </tr>
+    </table>
+</body>
+</html>

@@ -4,5 +4,10 @@
   "secretKey": "SECRET_KEY",
   "crispWebsite": "CRISP_WEBSITE",
   "crispIdentifier": "CRISP_IDENTIFIER",
-  "crispKey": "CRISP_KEY"
+  "crispKey": "CRISP_KEY",
+  "smtpName": "SMTP_NAME",
+  "smtpHost": "SMTP_HOST",
+  "smtpPort": "SMTP_PORT",
+  "smtpUser": "SMTP_USER",
+  "smtpPass": "SMTP_PASS"
 }

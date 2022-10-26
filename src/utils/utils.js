@@ -1,7 +1,7 @@
 import config from 'config';
 import { sign } from 'jsonwebtoken';
 
-export const createToken = user => {
+export const createToken = (user, expiresIn = '7d') => {
   const secretKey = config.get('secretKey');
 
   const dataStoredInToken = {
@@ -9,14 +9,8 @@ export const createToken = user => {
     role: user.role,
   };
 
-  const expiresIn = 60 * 60;
-
   return {
     expiresIn,
     token: sign(dataStoredInToken, secretKey, { expiresIn }),
   };
-};
-
-export const createCookie = tokenData => {
-  return `Authorization=${tokenData.token}; HttpOnly; Max-Age=${tokenData.expiresIn};`;
 };

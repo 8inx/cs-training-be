@@ -13,6 +13,7 @@ import userRoute from '@routes/user.route';
 import conversationExerciseRoute from '@routes/conversation-exercise.route';
 import trainingRoute from '@routes/training.route';
 import messageExerciseRoute from '@routes/message-exercise.route';
+import previewRoute from '@routes/preview.route';
 import errorMiddleware from '@middlewares/error.middleware';
 
 const port = config.get('port');
@@ -31,6 +32,7 @@ app.use('/user', userRoute);
 app.use('/conversation-exercise', conversationExerciseRoute);
 app.use('/training', trainingRoute);
 app.use('/message-exercise', messageExerciseRoute);
+app.use('/preview', previewRoute);
 
 /* errorMiddleware */
 app.use(errorMiddleware);
