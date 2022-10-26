@@ -6,9 +6,7 @@ import User from '@models/user.model';
 
 export const verifyToken = async (req, res, next) => {
   try {
-    const Authorization =
-      req.cookies['Authorization'] ||
-      (req.header('Authorization') ? req.header('Authorization').split('Bearer ')[1] : null);
+    const Authorization = req.header('Authorization') ? req.header('Authorization').split('Bearer ')[1] : null;
 
     if (Authorization) {
       const secretKey = config.get('secretKey');

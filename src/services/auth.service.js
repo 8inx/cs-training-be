@@ -3,7 +3,7 @@ import { compare, hash } from 'bcrypt';
 import DuplicateKeyError from '@errors/DuplicateKeyError';
 import HttpError from '@errors/HttpError';
 import User from '@models/user.model';
-import { createCookie, createToken } from '@utils/utils';
+import { createToken } from '@utils/utils';
 
 export const register = async (input, requesterRole) => {
   if (input.role === 'admin' && requesterRole !== 'admin') throw new HttpError(401, 'Only admin is authorized');
@@ -16,9 +16,8 @@ export const register = async (input, requesterRole) => {
 
   const { password, ...user } = newUser.toObject();
   const token = createToken(user);
-  const cookie = createCookie(token);
 
-  return { cookie, user };
+  return { token, user };
 };
 
 export const login = async input => {
@@ -30,7 +29,6 @@ export const login = async input => {
 
   const { password, ...user } = findUser.toObject();
   const token = createToken(user);
-  const cookie = createCookie(token);
 
-  return { cookie, user, token };
+  return { token, user };
 };

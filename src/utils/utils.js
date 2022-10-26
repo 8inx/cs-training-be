@@ -16,7 +16,3 @@ export const createToken = user => {
     token: sign(dataStoredInToken, secretKey, { expiresIn }),
   };
 };
-
-export const createCookie = tokenData => {
-  return `Authorization=${tokenData.token}; HttpOnly; Max-Age=${tokenData.expiresIn};`;
-};
