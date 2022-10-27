@@ -6,6 +6,7 @@ import {
   findUserTrainings,
   findUsersOngoingTrainings,
   findUsersEndedTrainings,
+  endTraining,
 } from '@services/training.service';
 
 export const createTrainingHandler = async (req, res, next) => {
@@ -15,6 +16,15 @@ export const createTrainingHandler = async (req, res, next) => {
       ...req.body,
     };
     const newTraining = await createTraining(input);
+    res.status(200).json({ data: newTraining, message: 'create success' });
+  } catch (error) {
+    next(error);
+  }
+};
+
+export const endTrainingHandler = async (req, res, next) => {
+  try {
+    const newTraining = await endTraining(req.params.trainingId);
     res.status(200).json({ data: newTraining, message: 'create success' });
   } catch (error) {
     next(error);
