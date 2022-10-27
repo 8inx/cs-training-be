@@ -1,22 +1,15 @@
 import { Router } from 'express';
 
-import validationMiddleware from '@middlewares/validation.middleware';
 import {
-  checkRegistrationAccessHandler,
+  checkInviteHandler,
   inviteUserHandler,
   loginHandler,
   logoutHandler,
   registerHandler,
-  registerWithTokenHandler,
 } from '@controllers/auth.controller';
-import {
-  checkRegistrationAccessSchema,
-  inviteUserSchema,
-  loginShema,
-  registerSchema,
-  registerWithTokenSchema,
-} from '@schema/auth.schema';
 import { verifyAdmin } from '@middlewares/permission.middleware';
+import validationMiddleware from '@middlewares/validation.middleware';
+import { checkInviteSchema, inviteUserSchema, loginShema, registerSchema } from '@schema/auth.schema';
 
 const route = Router();
 
@@ -55,49 +48,16 @@ route.post('/register', validationMiddleware(registerSchema), registerHandler);
 
 /**
  * @openapi
- * '/auth/register/token':
- *  post:
- *    tags:
- *      - auth
- *    summary: register with token user
- *    requestBody:
- *      description: register body
- *      required: true
- *      content:
- *        application/json:
- *          schema:
- *            $ref: '#/definitions/auth/registerWithToken'
- *    responses:
- *      200:
- *        description: 'Success'
- *      400:
- *        description: 'Bad Request'
- *      401:
- *        description: 'Unauthorized'
- *      403:
- *        description: 'Request Forbidden'
- *      404:
- *        description: 'Not Found'
- *      409:
- *        description: 'Request Conflict'
- *      500:
- *        description: 'Server Error'
- */
-
-route.post('/register/token', validationMiddleware(registerWithTokenSchema), registerWithTokenHandler);
-
-/**
- * @openapi
- * '/auth/register':
+ * '/auth/invite':
  *  get:
  *    tags:
  *      - auth
- *    summary: check register access
+ *    summary: get register access
  *    parameters:
- *    - name: token
+ *    - name: emailToken
  *      in: query
  *      type: string
- *      description: access token
+ *      description: email access token
  *      required: true
  *    responses:
  *      200:
@@ -115,7 +75,7 @@ route.post('/register/token', validationMiddleware(registerWithTokenSchema), reg
  *      500:
  *        description: 'Server Error'
  */
-route.get('/register', validationMiddleware(checkRegistrationAccessSchema), checkRegistrationAccessHandler);
+route.get('/invite', validationMiddleware(checkInviteSchema), checkInviteHandler);
 
 /**
  * @openapi

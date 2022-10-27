@@ -1,31 +1,10 @@
-import { register, login, inviteUser, registerWithToken, checkRegistrationAccess } from '@services/auth.service';
+import { register, login, inviteUser, checkInvite } from '@services/auth.service';
 
 export const registerHandler = async (req, res, next) => {
   try {
     const input = req.body;
-    const requesterRole = req.user ? req.user.role : null;
-    const { token, user } = await register(input, requesterRole);
+    const { token, user } = await register(input);
     res.status(200).json({ data: { user, token }, mesage: 'register success' });
-  } catch (error) {
-    next(error);
-  }
-};
-
-export const registerWithTokenHandler = async (req, res, next) => {
-  try {
-    const input = req.body;
-    const { token, user } = await registerWithToken(input);
-    res.status(200).json({ data: { user, token }, mesage: 'register success' });
-  } catch (error) {
-    next(error);
-  }
-};
-
-export const checkRegistrationAccessHandler = async (req, res, next) => {
-  try {
-    const { token } = req.query;
-    const user = await checkRegistrationAccess(token);
-    res.status(200).json({ data: user, mesage: 'valid token' });
   } catch (error) {
     next(error);
   }
@@ -59,6 +38,16 @@ export const inviteUserHandler = async (req, res, next) => {
     const { email, role } = req.body;
     const invite = await inviteUser(email, role);
     res.status(200).json({ data: invite, mesage: 'user invite success' });
+  } catch (error) {
+    next(error);
+  }
+};
+
+export const checkInviteHandler = async (req, res, next) => {
+  try {
+    const { emailToken } = req.query;
+    const user = await checkInvite(emailToken);
+    res.status(200).json({ data: user, mesage: 'valid token' });
   } catch (error) {
     next(error);
   }

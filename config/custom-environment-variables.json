@@ -1,6 +1,7 @@
 {
   "port": "PORT",
   "dbUri": "DB_URI",
+  "feBaseUrl": "FE_BASE_URL",
   "secretKey": "SECRET_KEY",
   "crispWebsite": "CRISP_WEBSITE",
   "crispIdentifier": "CRISP_IDENTIFIER",

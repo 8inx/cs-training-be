@@ -14,6 +14,7 @@ import { email, firstName, lastName, password, role } from './user.schema';
  *          - firstName
  *          - lastName
  *          - role
+ *          - token
  *        properties:
  *          email:
  *            type: string
@@ -31,6 +32,9 @@ import { email, firstName, lastName, password, role } from './user.schema';
  *            type: string
  *            enum: ['trainee', 'coach', 'admin']
  *            default: 'trainee'
+ *          token:
+ *            type: string
+ *            default: 'tokenHere'
  */
 
 export const registerSchema = object().shape({
@@ -40,72 +44,13 @@ export const registerSchema = object().shape({
     firstName,
     lastName,
     role,
-  }),
-});
-
-/**
- *  @openapi
- *  definitions:
- *    auth:
- *      registerWithToken:
- *        type: object
- *        required:
- *          - email
- *          - password
- *          - firstName
- *          - lastName
- *          - role
- *          - token
- *        properties:
- *          email:
- *            type: string
- *            default: example@email.com
- *          password:
- *            type: string
- *            default: password
- *          firstName:
- *            type: string
- *            default: John
- *          lastName:
- *            type: string
- *            default: Dalton
- *          role:
- *            type: string
- *            enum: ['trainee', 'coach', 'admin']
- *            default: 'trainee'
- *          token:
- *            type: string
- *            default: 'tokenHere'
- */
-
-export const registerWithTokenSchema = object().shape({
-  body: object({
-    email,
-    password,
-    firstName,
-    lastName,
-    role,
     token: string().required('token is required'),
   }),
 });
 
-/**
- *  @openapi
- *  definitions:
- *    auth:
- *      checkRegistrationAccess:
- *        type: object
- *        required:
- *          - token
- *        properties:
- *          token:
- *            type: string
- *            default: 'tokenHere'
- */
-
-export const checkRegistrationAccessSchema = object().shape({
+export const checkInviteSchema = object().shape({
   query: object({
-    token: string().required('token is required'),
+    emailToken: string().required('email token is required'),
   }),
 });
 
