@@ -6,7 +6,7 @@ import Training from '@models/training.model';
 import User from '@models/user.model';
 import firebase from '@utils/firebase';
 import logger from '@utils/logger';
-import { onValue, ref, runTransaction, set, remove } from 'firebase/database';
+import { onValue, ref, runTransaction, set, push, remove } from 'firebase/database';
 
 const getOneRandomExercise = async userId => {
   const exerciseCount = await ConversationExercise.count();
@@ -43,28 +43,45 @@ export const createTraining = async input => {
     sessionId,
     userId,
     maxSegment: lastMessage[0].segmentId,
+    currentSegment: 1,
   });
 
   if (newTraining) {
     const messages = await MessageExercise.find({ sessionId });
+    const segmentOneMessages = await MessageExercise.find({ sessionId, segmentId: '1', from: 'user' });
 
     const channelId = `channels/${newTraining._id.toString()}`;
     const channelRef = ref(firebase, channelId);
+    const threadRef = ref(firebase, `${channelId}/thread`);
 
     set(ref(firebase, channelId), {
       ...newTraining.toObject(),
+    });
+
+    segmentOneMessages.map(sMessages => {
+      const newMessageRef = push(threadRef);
+      set(newMessageRef, {
+        segmentId: 1,
+        userId: 'crisp',
+        role: 'crisp',
+        profilePic: 'https://joeschmoe.io/api/v1/random',
+        content: sMessages.content,
+        isLast: false,
+        createdDate: Date.now(),
+      });
     });
 
     runTransaction(channelRef, channel => {
       messages.map(message => {
         logger.info('message', message);
         if (channel) {
-          if (!channel.exerceriseMessages) {
-            channel.exerceriseMessages = {};
+          if (!channel.exerciseMessages) {
+            channel.exerciseMessages = {};
           }
-          channel.exerceriseMessages[message._id.toString()] = message.toObject();
+          channel.exerciseMessages[message._id.toString()] = message.toObject();
         }
       });
+
       return channel;
     });
   }
