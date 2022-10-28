@@ -159,7 +159,11 @@ export const deleteTraining = async id => {
  */
 export const findTrainingById = async id => {
   const findById = await Training.findById(id);
-  return findById;
+  const thread = await Message.find({ trainingId: id });
+  return {
+    ...findById._doc,
+    thread,
+  };
 };
 
 /**
