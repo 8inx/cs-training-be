@@ -6,6 +6,7 @@
   "crispWebsite": "CRISP_WEBSITE",
   "crispIdentifier": "CRISP_IDENTIFIER",
   "crispKey": "CRISP_KEY",
+  "smtpSource": "SMTP_SOURCE",
   "smtpName": "SMTP_NAME",
   "smtpHost": "SMTP_HOST",
   "smtpPort": "SMTP_PORT",
