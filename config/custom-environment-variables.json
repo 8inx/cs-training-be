@@ -10,5 +10,12 @@
   "smtpHost": "SMTP_HOST",
   "smtpPort": "SMTP_PORT",
   "smtpUser": "SMTP_USER",
-  "smtpPass": "SMTP_PASS"
+  "smtpPass": "SMTP_PASS",
+  "firebaseKey": "FIREBASE_KEY",
+  "firebaseProjectId": "FIREBASE_PROJECT_ID",
+  "firebaseAuthDomain": "FIREBASE_AUTH_DOMAIN",
+  "firebaseStorageBucket": "FIREBASE_STORAGE_BUCKET",
+  "firebaseMessengerId": "FIREBASE_MESSENGER_ID",
+  "firebaseAppId": "FIREBASE_APP_ID",
+  "firebaseDbUrl": "FIREBASE_DATABASE_URL"
 }

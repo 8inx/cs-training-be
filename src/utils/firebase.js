@@ -1,14 +1,23 @@
 import { initializeApp } from 'firebase/app';
 import { getDatabase, } from 'firebase/database';
+import config from 'config';
+
+const firebaseKey = config.get('firebaseKey');
+const firebaseProjectId = config.get('firebaseProjectId');
+const firebaseAuthDomain = config.get('firebaseAuthDomain');
+const firebaseStorageBucket = config.get('firebaseStorageBucket');
+const firebaseMessengerId = config.get('firebaseMessengerId');
+const firebaseAppId = config.get('firebaseAppId');
+const firebaseDbUrl = config.get('firebaseDbUrl');
 
 const firebaseConfig = {
-  apiKey: "AIzaSyDs-aG6vQzI-AIJNX8lACwAjGpS9AZCqSU",
-  authDomain: "cs-training-131bb.firebaseapp.com",
-  projectId: "cs-training-131bb",
-  storageBucket: "cs-training-131bb.appspot.com",
-  messagingSenderId: "1066003116917",
-  appId: "1:1066003116917:web:ea071ac1fe2631cf27993c",
-  databaseURL: 'https://cs-training-131bb-default-rtdb.asia-southeast1.firebasedatabase.app/',
+  apiKey: firebaseKey,
+  authDomain: firebaseProjectId,
+  projectId: firebaseAuthDomain,
+  storageBucket:firebaseStorageBucket,
+  messagingSenderId: firebaseMessengerId,
+  appId: firebaseAppId,
+  databaseURL: firebaseDbUrl,
 };
 
 const app = initializeApp(firebaseConfig);
