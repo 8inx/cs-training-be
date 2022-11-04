@@ -14,7 +14,7 @@ const getOneRandomExercise = async userId => {
   const randomExercise = await ConversationExercise.findOne().skip(randomExerciseNum);
 
   const findTraining = await Training.findOne({
-    userId,
+    participants: { $in: [userId] },
     sessionId: randomExercise.sessionId,
   });
 
@@ -37,6 +37,7 @@ export const createTraining = async input => {
   const lastMessage = await MessageExercise.find({ sessionId }).sort({ segmentId: -1 }).limit(1);
 
   const newTraining = await Training.create({
+    participants: [userId],
     meta,
     sessionId,
     userId,
@@ -87,11 +88,12 @@ export const createTraining = async input => {
   return newTraining;
 };
 
-export const endTraining = async trainingId => {
+export const endTraining = async (trainingId, endedById) => {
+  console.log(endedById);
   const findByIdAndUpdate = await Training.findByIdAndUpdate(
     trainingId,
     {
-      $set: { status: 'ended', dateEnded: new Date() },
+      $set: { status: 'ended', dateEnded: new Date(), endedBy: endedById },
     },
     { new: true }
   );
@@ -177,7 +179,10 @@ export const findUserTrainings = async (userId, query) => {
   const limit = size;
   const skip = Math.abs(page - 1) * limit;
 
-  const find = await Training.find({ userId }).sort({ createdAt }).skip(skip).limit(limit);
+  const find = await Training.find({ participants: { $in: [userId] } })
+    .sort({ createdAt })
+    .skip(skip)
+    .limit(limit);
   return find;
 };
 
@@ -192,7 +197,10 @@ export const findUsersOngoingTrainings = async (userId, query) => {
   const limit = size;
   const skip = Math.abs(page - 1) * limit;
 
-  const findOngoing = await Training.find({ userId, status: 'ongoing' }).sort({ createdAt }).skip(skip).limit(limit);
+  const findOngoing = await Training.find({ participants: { $in: [userId] }, status: 'ongoing' })
+    .sort({ createdAt })
+    .skip(skip)
+    .limit(limit);
   return findOngoing;
 };
 
@@ -207,6 +215,9 @@ export const findUsersEndedTrainings = async (userId, query) => {
   const limit = size;
   const skip = Math.abs(page - 1) * limit;
 
-  const findEnded = await Training.find({ userId, status: 'ended' }).sort({ createdAt }).skip(skip).limit(limit);
+  const findEnded = await Training.find({ participants: { $in: [userId] }, status: 'ended' })
+    .sort({ createdAt })
+    .skip(skip)
+    .limit(limit);
   return findEnded;
 };

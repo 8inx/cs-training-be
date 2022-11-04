@@ -24,7 +24,8 @@ export const createTrainingHandler = async (req, res, next) => {
 
 export const endTrainingHandler = async (req, res, next) => {
   try {
-    const newTraining = await endTraining(req.params.trainingId);
+    const endedById = req.user._id;
+    const newTraining = await endTraining(req.params.trainingId, endedById);
     res.status(200).json({ data: newTraining, message: 'create success' });
   } catch (error) {
     next(error);

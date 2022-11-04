@@ -31,6 +31,14 @@ const trainingSchema = new mongoose.Schema(
     dateEnded: {
       type: Date,
     },
+    participants: [
+      {
+        type: String,
+      },
+    ],
+    endedBy: {
+      type: String,
+    },
   },
   {
     timestamps: true,
