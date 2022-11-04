@@ -28,6 +28,9 @@ const trainingSchema = new mongoose.Schema(
       enum: ['ongoing', 'ended'],
       default: 'ongoing',
     },
+    dateEnded: {
+      type: Date,
+    },
   },
   {
     timestamps: true,

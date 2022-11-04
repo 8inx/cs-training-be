@@ -91,7 +91,7 @@ export const endTraining = async trainingId => {
   const findByIdAndUpdate = await Training.findByIdAndUpdate(
     trainingId,
     {
-      $set: { status: 'ended' },
+      $set: { status: 'ended', dateEnded: new Date() },
     },
     { new: true }
   );
