@@ -148,6 +148,7 @@ export const updateTraining = async (id, input) => {
  */
 export const deleteTraining = async id => {
   const findByIdAndDelete = await Training.findByIdAndDelete(id);
+  await Message.deleteMany({ trainingId: id });
   return findByIdAndDelete;
 };
 
