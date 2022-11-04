@@ -18,9 +18,7 @@ const getOneRandomExercise = async userId => {
     sessionId: randomExercise.sessionId,
   });
 
-  if (findTraining) {
-    getOneRandomExercise(userId);
-  }
+  findTraining && getOneRandomExercise(userId);
 
   return randomExercise;
 };
@@ -33,7 +31,7 @@ const getOneRandomExercise = async userId => {
 export const createTraining = async input => {
   const { userId } = input;
   const findUser = await User.findById(userId);
-  if (!findUser) throw new HttpError('400', 'Invalid userId');
+  if (!findUser) throw new HttpError(400, 'Invalid userId');
 
   const { meta, sessionId } = await getOneRandomExercise(userId);
   const lastMessage = await MessageExercise.find({ sessionId }).sort({ segmentId: -1 }).limit(1);
@@ -109,7 +107,8 @@ export const endTraining = async trainingId => {
           snapshots => {
             let messagesFromFirestore = [];
             snapshots.forEach(childSnapshots => {
-              messagesFromFirestore = [...messagesFromFirestore, { trainingId, ...childSnapshots.val() }];
+              const { id, _id, ...restSnapshots } = childSnapshots.val();
+              messagesFromFirestore = [...messagesFromFirestore, { trainingId, ...restSnapshots }];
             });
             resolve(messagesFromFirestore);
           },
