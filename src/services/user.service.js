@@ -60,3 +60,11 @@ export const findAllUsers = async query => {
     .limit(limit);
   return findUsers;
 };
+
+export const findTrainees = async query => {
+  const { size = 30, page = 1 } = query;
+  const limit = size;
+  const skip = Math.abs(page - 1) * limit;
+  const findUsers = await User.find({ role: 'trainee' }).skip(skip).limit(limit);
+  return findUsers;
+};

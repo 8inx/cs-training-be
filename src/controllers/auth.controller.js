@@ -14,10 +14,7 @@ export const loginHandler = async (req, res, next) => {
   try {
     const { user, token } = await login(req.body);
     res.status(200).json({
-      data: {
-        user,
-        token,
-      },
+      data: { user, token },
       mesage: 'login success',
     });
   } catch (error) {

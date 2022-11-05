@@ -1,5 +1,5 @@
 import { initializeApp } from 'firebase/app';
-import { getDatabase, } from 'firebase/database';
+import { getDatabase } from 'firebase/database';
 import config from 'config';
 
 const firebaseKey = config.get('firebaseKey');
@@ -14,7 +14,7 @@ const firebaseConfig = {
   apiKey: firebaseKey,
   authDomain: firebaseProjectId,
   projectId: firebaseAuthDomain,
-  storageBucket:firebaseStorageBucket,
+  storageBucket: firebaseStorageBucket,
   messagingSenderId: firebaseMessengerId,
   appId: firebaseAppId,
   databaseURL: firebaseDbUrl,

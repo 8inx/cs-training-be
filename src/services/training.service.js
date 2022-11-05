@@ -14,13 +14,11 @@ const getOneRandomExercise = async userId => {
   const randomExercise = await ConversationExercise.findOne().skip(randomExerciseNum);
 
   const findTraining = await Training.findOne({
-    userId,
+    participants: { $in: [userId] },
     sessionId: randomExercise.sessionId,
   });
 
-  if (findTraining) {
-    getOneRandomExercise(userId);
-  }
+  findTraining && getOneRandomExercise(userId);
 
   return randomExercise;
 };
@@ -33,12 +31,13 @@ const getOneRandomExercise = async userId => {
 export const createTraining = async input => {
   const { userId } = input;
   const findUser = await User.findById(userId);
-  if (!findUser) throw new HttpError('400', 'Invalid userId');
+  if (!findUser) throw new HttpError(400, 'Invalid userId');
 
   const { meta, sessionId } = await getOneRandomExercise(userId);
   const lastMessage = await MessageExercise.find({ sessionId }).sort({ segmentId: -1 }).limit(1);
 
   const newTraining = await Training.create({
+    participants: [userId],
     meta,
     sessionId,
     userId,
@@ -89,35 +88,41 @@ export const createTraining = async input => {
   return newTraining;
 };
 
-export const endTraining = async trainingId => {
+export const endTraining = async (trainingId, endedById) => {
+  const getFirebaseTraining = () =>
+    new Promise(resolve => {
+      return onValue(
+        ref(firebase, `channels/${trainingId}`),
+        snapshots => {
+          let participants = snapshots.val().participants;
+          let thread = Object.keys(snapshots.val().thread).map(k => ({
+            ...snapshots.val().thread[k],
+            trainingId,
+          }));
+          resolve({ participants, thread });
+        },
+        { onlyOnce: true }
+      );
+    });
+
+  const firebaseData = await getFirebaseTraining();
+  if (!firebaseData) throw new HttpError(400, 'No trainings found');
+
   const findByIdAndUpdate = await Training.findByIdAndUpdate(
     trainingId,
     {
-      $set: { status: 'ended' },
+      $set: {
+        participants: firebaseData.participants,
+        status: 'ended',
+        dateEnded: new Date(),
+        endedBy: endedById,
+      },
     },
     { new: true }
   );
 
   if (findByIdAndUpdate) {
-    const channelId = `channels/${trainingId}/thread`;
-    const threadRef = ref(firebase, channelId);
-
-    const getMessagesPromise = () =>
-      new Promise(resolve => {
-        return onValue(
-          threadRef,
-          snapshots => {
-            let messagesFromFirestore = [];
-            snapshots.forEach(childSnapshots => {
-              messagesFromFirestore = [...messagesFromFirestore, { trainingId, ...childSnapshots.val() }];
-            });
-            resolve(messagesFromFirestore);
-          },
-          { onlyOnce: true }
-        );
-      });
-    const messages = await getMessagesPromise();
-    await Message.insertMany(messages);
+    await Message.insertMany(firebaseData.thread);
     // delete ongoing training from firebase
     await remove(ref(firebase, `channels/${trainingId}`));
   }
@@ -149,6 +154,7 @@ export const updateTraining = async (id, input) => {
  */
 export const deleteTraining = async id => {
   const findByIdAndDelete = await Training.findByIdAndDelete(id);
+  await Message.deleteMany({ trainingId: id });
   return findByIdAndDelete;
 };
 
@@ -177,7 +183,10 @@ export const findUserTrainings = async (userId, query) => {
   const limit = size;
   const skip = Math.abs(page - 1) * limit;
 
-  const find = await Training.find({ userId }).sort({ createdAt }).skip(skip).limit(limit);
+  const find = await Training.find({ participants: { $in: [userId] } })
+    .sort({ createdAt })
+    .skip(skip)
+    .limit(limit);
   return find;
 };
 
@@ -192,7 +201,10 @@ export const findUsersOngoingTrainings = async (userId, query) => {
   const limit = size;
   const skip = Math.abs(page - 1) * limit;
 
-  const findOngoing = await Training.find({ userId, status: 'ongoing' }).sort({ createdAt }).skip(skip).limit(limit);
+  const findOngoing = await Training.find({ participants: { $in: [userId] }, status: 'ongoing' })
+    .sort({ createdAt })
+    .skip(skip)
+    .limit(limit);
   return findOngoing;
 };
 
@@ -207,6 +219,9 @@ export const findUsersEndedTrainings = async (userId, query) => {
   const limit = size;
   const skip = Math.abs(page - 1) * limit;
 
-  const findEnded = await Training.find({ userId, status: 'ended' }).sort({ createdAt }).skip(skip).limit(limit);
+  const findEnded = await Training.find({ participants: { $in: [userId] }, status: 'ended' })
+    .sort({ createdAt })
+    .skip(skip)
+    .limit(limit);
   return findEnded;
 };
