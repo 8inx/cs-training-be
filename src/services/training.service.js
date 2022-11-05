@@ -95,11 +95,12 @@ export const endTraining = async (trainingId, endedById) => {
         ref(firebase, `channels/${trainingId}`),
         snapshots => {
           let participants = snapshots.val().participants;
+          let currentSegment = snapshots.val().currentSegment;
           let thread = Object.keys(snapshots.val().thread).map(k => ({
             ...snapshots.val().thread[k],
             trainingId,
           }));
-          resolve({ participants, thread });
+          resolve({ participants, currentSegment, thread });
         },
         { onlyOnce: true }
       );
@@ -113,6 +114,7 @@ export const endTraining = async (trainingId, endedById) => {
     {
       $set: {
         participants: firebaseData.participants,
+        currentSegment: firebaseData.currentSegment,
         status: 'ended',
         dateEnded: new Date(),
         endedBy: endedById,
