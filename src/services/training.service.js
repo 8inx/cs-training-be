@@ -89,36 +89,40 @@ export const createTraining = async input => {
 };
 
 export const endTraining = async (trainingId, endedById) => {
-  console.log(endedById);
+  const getFirebaseTraining = () =>
+    new Promise(resolve => {
+      return onValue(
+        ref(firebase, `channels/${trainingId}`),
+        snapshots => {
+          let participants = snapshots.val().participants;
+          let thread = Object.keys(snapshots.val().thread).map(k => ({
+            ...snapshots.val().thread[k],
+            trainingId,
+          }));
+          resolve({ participants, thread });
+        },
+        { onlyOnce: true }
+      );
+    });
+
+  const firebaseData = await getFirebaseTraining();
+  if (!firebaseData) throw new HttpError(400, 'No trainings found');
+
   const findByIdAndUpdate = await Training.findByIdAndUpdate(
     trainingId,
     {
-      $set: { status: 'ended', dateEnded: new Date(), endedBy: endedById },
+      $set: {
+        participants: firebaseData.participants,
+        status: 'ended',
+        dateEnded: new Date(),
+        endedBy: endedById,
+      },
     },
     { new: true }
   );
 
   if (findByIdAndUpdate) {
-    const channelId = `channels/${trainingId}/thread`;
-    const threadRef = ref(firebase, channelId);
-
-    const getMessagesPromise = () =>
-      new Promise(resolve => {
-        return onValue(
-          threadRef,
-          snapshots => {
-            let messagesFromFirestore = [];
-            snapshots.forEach(childSnapshots => {
-              const { id, _id, ...restSnapshots } = childSnapshots.val();
-              messagesFromFirestore = [...messagesFromFirestore, { trainingId, ...restSnapshots }];
-            });
-            resolve(messagesFromFirestore);
-          },
-          { onlyOnce: true }
-        );
-      });
-    const messages = await getMessagesPromise();
-    await Message.insertMany(messages);
+    await Message.insertMany(firebaseData.thread);
     // delete ongoing training from firebase
     await remove(ref(firebase, `channels/${trainingId}`));
   }
