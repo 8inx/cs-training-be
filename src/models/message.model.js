@@ -1,5 +1,4 @@
 import mongoose from 'mongoose';
-import User from './user.model';
 
 const messageSchema = new mongoose.Schema({
   trainingId: {
@@ -32,6 +31,10 @@ const messageSchema = new mongoose.Schema({
   },
   feedback: {
     type: mongoose.Schema.Types.Mixed,
+  },
+  createdAt: {
+    type: String,
+    default: Date.now,
   },
 });
 

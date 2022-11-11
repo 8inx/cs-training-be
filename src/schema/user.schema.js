@@ -85,6 +85,20 @@ export const findAllUsersSchema = object().shape({
   query: object({
     role: string(),
     page: number(),
-    limit: number(),
+    size: number(),
+  }),
+});
+
+export const findAllTraineesStatsSchema = object().shape({
+  query: object({
+    page: number(),
+    size: number(),
+  }),
+});
+
+export const findAllCoachesStatsSchema = object().shape({
+  query: object({
+    page: number(),
+    size: number(),
   }),
 });

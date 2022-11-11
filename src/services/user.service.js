@@ -57,14 +57,111 @@ export const findAllUsers = async query => {
   const skip = Math.abs(page - 1) * limit;
   const findUsers = await User.find({ ...(role ? { role } : {}) })
     .skip(skip)
-    .limit(limit);
+    .limit(parseInt(limit));
   return findUsers;
 };
 
-export const findTrainees = async query => {
+// find all user trainees
+export const findAllTraineesStats = async query => {
   const { size = 30, page = 1 } = query;
   const limit = size;
   const skip = Math.abs(page - 1) * limit;
-  const findUsers = await User.find({ role: 'trainee' }).skip(skip).limit(limit);
+  const findUsers = await User.aggregate([
+    {
+      $match: { role: 'trainee' },
+    },
+    {
+      $lookup: {
+        from: 'messages',
+        let: { userId: '$_id' },
+        pipeline: [
+          {
+            $match: {
+              $expr: {
+                $eq: ['$userId', { $toString: '$$userId' }],
+              },
+            },
+          },
+        ],
+        as: 'messages',
+      },
+    },
+    {
+      $unwind: {
+        path: '$messages',
+        preserveNullAndEmptyArrays: true,
+      },
+    },
+    {
+      $group: {
+        _id: '$_id',
+        totalLikes: {
+          $sum: { $cond: { if: { $eq: ['$messages.feedback.status', 1] }, then: 1, else: 0 } },
+        },
+        totalDislikes: {
+          $sum: { $cond: { if: { $eq: ['$messages.feedback.status', 0] }, then: 1, else: 0 } },
+        },
+        trainings: { $addToSet: '$messages.trainingId' },
+        coaches: { $addToSet: '$messages.feedback.coach._id' },
+        firstName: { $first: '$firstName' },
+        lastName: { $first: '$lastName' },
+        email: { $first: '$email' },
+      },
+    },
+  ])
+    .skip(skip)
+    .limit(parseInt(limit));
+  return findUsers;
+};
+
+// find all coach
+export const findAllCoachesStats = async query => {
+  const { size = 30, page = 1 } = query;
+  const limit = size;
+  const skip = Math.abs(page - 1) * limit;
+  const findUsers = await User.aggregate([
+    {
+      $match: { role: 'coach' },
+    },
+    {
+      $lookup: {
+        from: 'messages',
+        let: { coachId: '$_id' },
+        pipeline: [
+          {
+            $match: {
+              $expr: {
+                $eq: ['$feedback.coach._id', { $toString: '$$coachId' }],
+              },
+            },
+          },
+        ],
+        as: 'messages',
+      },
+    },
+    {
+      $unwind: {
+        path: '$messages',
+        preserveNullAndEmptyArrays: true,
+      },
+    },
+    {
+      $group: {
+        _id: '$_id',
+        totalLikesGiven: {
+          $sum: { $cond: { if: { $eq: ['$messages.feedback.status', 1] }, then: 1, else: 0 } },
+        },
+        totalDislikesGiven: {
+          $sum: { $cond: { if: { $eq: ['$messages.feedback.status', 0] }, then: 1, else: 0 } },
+        },
+        trainings: { $addToSet: '$messages.trainingId' },
+        firstName: { $first: '$firstName' },
+        lastName: { $first: '$lastName' },
+        email: { $first: '$email' },
+      },
+    },
+  ])
+    .skip(skip)
+    .limit(parseInt(limit));
   return findUsers;
 };

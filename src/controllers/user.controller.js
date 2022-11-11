@@ -1,4 +1,12 @@
-import { deleteUser, findAllUsers, findUserById, updateUser, updateUserRole } from '@services/user.service';
+import {
+  deleteUser,
+  findAllCoachesStats,
+  findAllTraineesStats,
+  findAllUsers,
+  findUserById,
+  updateUser,
+  updateUserRole,
+} from '@services/user.service';
 
 export const updateUserHandler = async (req, res, next) => {
   try {
@@ -47,6 +55,26 @@ export const findAllUsersHandler = async (req, res, next) => {
     const query = req.query;
     const findUsers = await findAllUsers(query);
     res.status(200).json({ data: findUsers, mesage: 'find all users' });
+  } catch (error) {
+    next(error);
+  }
+};
+
+export const findAllTraineesStatsHandler = async (req, res, next) => {
+  try {
+    const query = req.query;
+    const findUsers = await findAllTraineesStats(query);
+    res.status(200).json({ data: findUsers, mesage: 'find all trainees stats' });
+  } catch (error) {
+    next(error);
+  }
+};
+
+export const findAllCoachesStatsHandler = async (req, res, next) => {
+  try {
+    const query = req.query;
+    const findUsers = await findAllCoachesStats(query);
+    res.status(200).json({ data: findUsers, mesage: 'find all coaches stats' });
   } catch (error) {
     next(error);
   }

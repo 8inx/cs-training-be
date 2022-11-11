@@ -38,6 +38,7 @@ const trainingSchema = new mongoose.Schema(
     ],
     endedBy: {
       type: String,
+      default: '',
     },
   },
   {

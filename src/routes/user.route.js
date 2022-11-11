@@ -2,6 +2,8 @@ import { Router } from 'express';
 
 import {
   deleteUserHandler,
+  findAllCoachesStatsHandler,
+  findAllTraineesStatsHandler,
   findAllUsersHandler,
   findUserByIdHandler,
   updateUserHandler,
@@ -9,6 +11,8 @@ import {
 } from '@controllers/user.controller';
 import {
   deleteUserSchema,
+  findAllCoachesStatsSchema,
+  findAllTraineesStatsSchema,
   findAllUsersSchema,
   findUserByIdSchema,
   updateUserRoleSchema,
@@ -186,5 +190,76 @@ route.get('/id/:id', validationMiddleware(findUserByIdSchema), findUserByIdHandl
  */
 
 route.get('/all', validationMiddleware(findAllUsersSchema), findAllUsersHandler);
+
+/**
+ * @openapi
+ * '/user/trainees/stats':
+ *  get:
+ *    tags:
+ *      - user
+ *    summary: find all trainees stats
+ *    parameters:
+ *    - name: page
+ *      in: query
+ *      schema:
+ *        type: number
+ *        description: page
+ *        default: 1
+ *    - name: size
+ *      in: query
+ *      schema:
+ *        type: number
+ *        description: page size
+ *        default: 30
+ *    responses:
+ *      200:
+ *        description: 'Success'
+ *      400:
+ *        description: 'Bad Request'
+ *      404:
+ *        description: 'Not Found'
+ *      500:
+ *        description: 'Server Error'
+ */
+
+route.get(
+  '/trainees/stats',
+  validationMiddleware(findAllTraineesStatsSchema),
+  verifyAdmin,
+  findAllTraineesStatsHandler
+);
+
+/**
+ * @openapi
+ * '/user/coaches/stats':
+ *  get:
+ *    tags:
+ *      - user
+ *    summary: find all trainees stats
+ *    parameters:
+ *    - name: page
+ *      in: query
+ *      schema:
+ *        type: number
+ *        description: page
+ *        default: 1
+ *    - name: size
+ *      in: query
+ *      schema:
+ *        type: number
+ *        description: page size
+ *        default: 30
+ *    responses:
+ *      200:
+ *        description: 'Success'
+ *      400:
+ *        description: 'Bad Request'
+ *      404:
+ *        description: 'Not Found'
+ *      500:
+ *        description: 'Server Error'
+ */
+
+route.get('/coaches/stats', validationMiddleware(findAllCoachesStatsSchema), verifyAdmin, findAllCoachesStatsHandler);
 
 export default route;

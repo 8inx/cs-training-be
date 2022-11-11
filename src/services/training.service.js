@@ -53,10 +53,11 @@ export const createTraining = async input => {
     const channelRef = ref(firebase, channelId);
     const threadRef = ref(firebase, `${channelId}/thread`);
 
-    set(ref(firebase, channelId), {
+    set(channelRef, {
       ...newTraining.toObject(),
     });
 
+    // push initial messages(segment 1) to firebase
     segmentOneMessages.map(sMessages => {
       const newMessageRef = push(threadRef);
       set(newMessageRef, {
@@ -66,7 +67,8 @@ export const createTraining = async input => {
         profilePic: 'https://joeschmoe.io/api/v1/random',
         content: sMessages.content,
         isLast: false,
-        createdDate: Date.now(),
+        seenBy: [],
+        createdAt: Date.now(),
       });
     });
 
