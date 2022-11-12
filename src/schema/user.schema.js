@@ -1,7 +1,6 @@
 import { mixed, object, string, number } from 'yup';
 
 // reusable props
-export const id = string().required('User id is required');
 export const email = string().email('Not valid email').required('Email is required!');
 export const password = string().min(6, 'Too short - should be 6 chars minimum').required('Password is required');
 export const firstName = string().min(2, 'Too short - should be 2 chars minimum').required('First name is required');
@@ -42,7 +41,9 @@ export const updateUserSchema = object().shape({
     lastName,
   }),
   params: object({
-    id,
+    id: string()
+      .matches(/^[0-9a-fA-F]{24}$/, 'Invalid id')
+      .required('Id is required'),
   }),
 });
 
@@ -65,19 +66,25 @@ export const updateUserRoleSchema = object().shape({
     role,
   }),
   params: object({
-    id,
+    id: string()
+      .matches(/^[0-9a-fA-F]{24}$/, 'Invalid id')
+      .required('Id is required'),
   }),
 });
 
 export const deleteUserSchema = object().shape({
   params: object({
-    id,
+    id: string()
+      .matches(/^[0-9a-fA-F]{24}$/, 'Invalid id')
+      .required('Id is required'),
   }),
 });
 
 export const findUserByIdSchema = object().shape({
   params: object({
-    id,
+    id: string()
+      .matches(/^[0-9a-fA-F]{24}$/, 'Invalid id')
+      .required('Id is required'),
   }),
 });
 

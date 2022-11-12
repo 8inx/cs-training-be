@@ -78,29 +78,3 @@ export const loginShema = object().shape({
     password,
   }),
 });
-
-/**
- *  @openapi
- *  definitions:
- *    auth:
- *      inviteUser:
- *        type: object
- *        required:
- *          - email
- *          - role
- *        properties:
- *          email:
- *            type: string
- *            default: example@email.com
- *          role:
- *            type: string
- *            enum: ['trainee','coach']
- *            default: trainee
- */
-
-export const inviteUserSchema = object().shape({
-  body: object({
-    email,
-    role,
-  }),
-});

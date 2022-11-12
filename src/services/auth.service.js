@@ -7,7 +7,6 @@ import HttpError from '@errors/HttpError';
 import Invited from '@models/invited.model';
 import User from '@models/user.model';
 import { createToken } from '@utils/utils';
-import { sendEmailInvitation } from './email.service';
 
 export const register = async input => {
   const secretKey = config.get('secretKey');
@@ -43,30 +42,4 @@ export const login = async input => {
   const token = createToken(user);
 
   return { token, user };
-};
-
-export const inviteUser = async (email, role) => {
-  const findUser = await User.findOne({ email });
-  if (findUser) throw new DuplicateKeyError('email', 'Email is already active');
-
-  const findInvites = await Invited.findOne({ email });
-  if (findInvites) throw new DuplicateKeyError('email', 'Email is already invited');
-
-  const invitedUser = await Invited.create({ email, role });
-
-  const registrationToken = createToken(invitedUser.toObject(), '30d');
-  const feBaseUrl = config.get('feBaseUrl');
-  const registrationUrl = `${feBaseUrl}/register/${registrationToken.token}`;
-  const emailInvite = await sendEmailInvitation(email, role, registrationUrl);
-
-  return { emailInvite, registrationUrl };
-};
-
-export const checkInvite = async emailToken => {
-  const secretKey = config.get('secretKey');
-  const user = await verify(emailToken, secretKey);
-  const invited = await Invited.findById(user._id).lean();
-  if (!invited) throw new HttpError(401, 'Account not invited');
-
-  return { ...invited };
 };

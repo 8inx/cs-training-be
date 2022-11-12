@@ -2,7 +2,9 @@ import { object, string, number } from 'yup';
 
 const trainingParams = {
   params: object({
-    trainingId: string().required('training id is required'),
+    trainingId: string()
+      .matches(/^[0-9a-fA-F]{24}$/, 'Invalid training id')
+      .required('Training id is required'),
   }),
 };
 

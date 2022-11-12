@@ -7,7 +7,6 @@ import User from '@models/user.model';
 export const verifyToken = async (req, res, next) => {
   try {
     const Authorization = req.header('Authorization') ? req.header('Authorization').split('Bearer ')[1] : null;
-
     if (Authorization) {
       const secretKey = config.get('secretKey');
       const dataInToken = await verify(Authorization, secretKey);
@@ -28,7 +27,7 @@ export const verifyToken = async (req, res, next) => {
 
 export const verifyAuthorization = async (req, res, next) => {
   await verifyToken(req, res, () => {
-    if (req.user && (req.user._id == req.params.id || req.user.role == 'admin')) {
+    if ((req.user && req.user._id == req.params.id) || req.user.role == 'admin') {
       next();
     } else {
       next(new HttpError(403, 'Not allowed'));
@@ -38,7 +37,7 @@ export const verifyAuthorization = async (req, res, next) => {
 
 export const verifyTrainee = async (req, res, next) => {
   await verifyAuthorization(req, res, () => {
-    if (req.user && (req.user.role == 'trainee' || req.user.role == 'admin')) {
+    if ((req.user && req.user.role == 'trainee') || req.user.role == 'admin') {
       next();
     } else {
       next(new HttpError(403, 'Allowed only for trainees'));
@@ -48,7 +47,7 @@ export const verifyTrainee = async (req, res, next) => {
 
 export const verifyCoach = async (req, res, next) => {
   await verifyAuthorization(req, res, () => {
-    if (req.user && (req.user.role == 'coach' || req.user.role == 'admin')) {
+    if ((req.user && req.user.role == 'coach') || req.user.role == 'admin') {
       next();
     } else {
       next(new HttpError(403, 'Allowed only for coaches'));
@@ -58,7 +57,7 @@ export const verifyCoach = async (req, res, next) => {
 
 export const verifyAdmin = async (req, res, next) => {
   await verifyToken(req, res, () => {
-    if (req.user && req.user && req.user.role === 'admin') {
+    if (req.user && req.user.role === 'admin') {
       next();
     } else {
       next(new HttpError(403, 'Admin token required'));

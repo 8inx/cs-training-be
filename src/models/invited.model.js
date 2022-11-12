@@ -12,6 +12,9 @@ const invitedSchema = new mongoose.Schema(
       enum: ['trainee', 'coach', 'admin'],
       default: 'trainee',
     },
+    expirationDate: {
+      type: Date,
+    },
   },
   {
     timestamps: true,

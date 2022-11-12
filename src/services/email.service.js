@@ -4,7 +4,6 @@ import Hogan from 'hogan.js';
 import fs from 'fs';
 import postmarkTransport from 'nodemailer-postmark-transport';
 
-
 const transporterConfig = {
   name: config.get('smtpName'),
   host: config.get('smtpHost'),
@@ -26,13 +25,16 @@ export const sendEmailInvitation = async (email, role, registrationUrl) => {
   const template = fs.readFileSync(__dirname + '/../views/email.hjs', 'utf-8');
   const compiledTemplate = Hogan.compile(template);
 
-  const transporter = config.get('smtpSource') === 'postmark' ? 
-    nodemailer.createTransport(postmarkTransport({
-      auth: {
-        apiKey: config.get('smtpPass'),
-      }
-    })) :
-    nodemailer.createTransport(transporterConfig);
+  const transporter =
+    config.get('smtpSource') === 'postmark'
+      ? nodemailer.createTransport(
+          postmarkTransport({
+            auth: {
+              apiKey: config.get('smtpPass'),
+            },
+          })
+        )
+      : nodemailer.createTransport(transporterConfig);
 
   const info = await transporter.sendMail({
     from: `"cs-training" <${transporterConfig.auth.user}>`,
