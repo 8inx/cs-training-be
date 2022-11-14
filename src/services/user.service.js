@@ -6,11 +6,11 @@ import HttpError from '@errors/HttpError';
 import User from '@models/user.model';
 
 // update user
-export const updateUser = async (userId, input) => {
+export const updateUser = async (userId, requester, input) => {
   const { email, password } = input;
   if (email) {
-    const user = await User.findOne({ email });
-    if (user && user._id != userId) throw new DuplicateKeyError('email', `${email} is already taken`);
+    const findOne = await User.findOne({ email }).lean();
+    if (findOne && findOne._id.toString() !== userId) throw new DuplicateKeyError('email', `${email} is already taken`);
   }
 
   if (password) {
@@ -18,9 +18,11 @@ export const updateUser = async (userId, input) => {
     input = { ...input, password: hashedPassword };
   }
 
-  const { role, finishedExercises, ...restInput } = input;
-  const updateUserById = await User.findByIdAndUpdate(userId, { $set: restInput }, { new: true });
+  if (requester.role !== 'admin') {
+    input.role = requester.role;
+  }
 
+  const updateUserById = await User.findByIdAndUpdate(userId, { $set: input }, { new: true });
   return updateUserById;
 };
 

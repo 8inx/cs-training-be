@@ -1,4 +1,4 @@
-import { register, login } from '@services/auth.service';
+import { register, login, changePassword } from '@services/auth.service';
 
 export const registerHandler = async (req, res, next) => {
   try {
@@ -25,6 +25,17 @@ export const loginHandler = async (req, res, next) => {
 export const logoutHandler = (_, res, next) => {
   try {
     res.status(200).json({ data: {}, message: 'logout' });
+  } catch (error) {
+    next(error);
+  }
+};
+
+export const changePasswordHandler = async (req, res, next) => {
+  try {
+    const userId = req.params.id;
+    const input = req.body;
+    const updatedUser = await changePassword(userId, input);
+    res.status(200).json({ data: updatedUser, message: 'change password success!' });
   } catch (error) {
     next(error);
   }

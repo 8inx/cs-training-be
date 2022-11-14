@@ -219,7 +219,7 @@ route.get(
 
 /**
  * @openapi
- * '/training/user/{userId}/ongoing':
+ * '/training/user/{userId}/ended':
  *  get:
  *    tags:
  *      - training

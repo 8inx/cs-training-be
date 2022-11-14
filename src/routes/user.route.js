@@ -7,7 +7,6 @@ import {
   findAllUsersHandler,
   findUserByIdHandler,
   updateUserHandler,
-  updateUserRoleHandler,
 } from '@controllers/user.controller';
 import {
   deleteUserSchema,
@@ -15,7 +14,6 @@ import {
   findAllTraineesStatsSchema,
   findAllUsersSchema,
   findUserByIdSchema,
-  updateUserRoleSchema,
   updateUserSchema,
 } from '@schema/user.schema';
 import { verifyAdmin, verifyAuthorization, verifyToken } from '@middlewares/permission.middleware';
@@ -60,42 +58,6 @@ const route = Router();
  *        description: 'Server Error'
  */
 route.put('/:id', validationMiddleware(updateUserSchema), verifyAuthorization, updateUserHandler);
-
-/**
- * @openapi
- * '/user/{id}/role':
- *  put:
- *    tags:
- *      - user
- *    summary: update user role
- *    parameters:
- *    - name: id
- *      in: path
- *      type: string
- *      description: user id
- *      required: true
- *    requestBody:
- *      description: update body
- *      required: true
- *      content:
- *        application/json:
- *          schema:
- *            $ref: '#/definitions/user/updateUserRole'
- *    responses:
- *      200:
- *        description: 'Success'
- *      400:
- *        description: 'Bad Request'
- *      401:
- *        description: 'Unauthorized'
- *      403:
- *        description: 'Request Forbidden'
- *      404:
- *        description: 'Not Found'
- *      500:
- *        description: 'Server Error'
- */
-route.put('/:id/role', validationMiddleware(updateUserRoleSchema), verifyAdmin, updateUserRoleHandler);
 
 /**
  * @openapi

@@ -1,4 +1,4 @@
-import { object, string } from 'yup';
+import { object, string, ref } from 'yup';
 
 import { email, firstName, lastName, password, role } from './user.schema';
 
@@ -76,5 +76,42 @@ export const loginShema = object().shape({
   body: object({
     email,
     password,
+  }),
+});
+
+/**
+ *  @openapi
+ *  definitions:
+ *    auth:
+ *      changePassword:
+ *        type: object
+ *        required:
+ *          - oldPassword
+ *          - newPassword
+ *          - confirmPassword
+ *        properties:
+ *          oldPassword:
+ *            type: string
+ *            default: password
+ *          newPassword:
+ *            type: string
+ *            default: password
+ *          confirmPassword:
+ *            type: string
+ *            default: password
+ */
+
+export const ChangePasswordSchema = object().shape({
+  body: object({
+    oldPassword: string(),
+    newPassword: string().min(8, 'Too short!').max(50, 'Too long!').required('Required'),
+    confirmPassword: string()
+      .oneOf([ref('newPassword')], 'Passwords must match')
+      .required('Required'),
+  }),
+  params: object({
+    id: string()
+      .matches(/^[0-9a-fA-F]{24}$/, 'Invalid id')
+      .required('Id is required'),
   }),
 });

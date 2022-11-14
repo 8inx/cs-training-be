@@ -15,54 +15,29 @@ export const role = mixed().oneOf(['trainee', 'coach', 'admin'], 'Invalid role v
  *        type: object
  *        required:
  *          - email
- *          - password
  *          - firstName
  *          - lastName
  *        properties:
  *          email:
  *            type: string
  *            default: example@email.com
- *          password:
- *            type: string
- *            default: password
  *          firstName:
  *            type: string
  *            default: Jimboy
  *          lastName:
  *            type: string
  *            default: Schwarzenegger
- */
-
-export const updateUserSchema = object().shape({
-  body: object({
-    email,
-    password,
-    firstName,
-    lastName,
-  }),
-  params: object({
-    id: string()
-      .matches(/^[0-9a-fA-F]{24}$/, 'Invalid id')
-      .required('Id is required'),
-  }),
-});
-
-/**
- *  @openapi
- *  definitions:
- *    user:
- *      updateUserRole:
- *        type: object
- *        required:
- *          - role
- *        properties:
  *          role:
  *            type: string
  *            enum: ['trainee', 'coach', 'admin']
  *            default: 'trainee'
  */
-export const updateUserRoleSchema = object().shape({
+
+export const updateUserSchema = object().shape({
   body: object({
+    email,
+    firstName,
+    lastName,
     role,
   }),
   params: object({

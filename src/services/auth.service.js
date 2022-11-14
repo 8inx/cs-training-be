@@ -43,3 +43,16 @@ export const login = async input => {
 
   return { token, user };
 };
+
+export const changePassword = async (userId, input) => {
+  const findById = await User.findById(userId).select('+password');
+  if (!findById) throw new HttpError(400, 'User not found');
+
+  const isPasswordMatching = await compare(input.oldPassword, findById.password);
+  if (!isPasswordMatching) throw new HttpError(400, 'Incorrect password');
+
+  const hashedPassword = await hash(input.newPassword, 10);
+
+  const updatedUser = await User.findByIdAndUpdate(userId, { $set: { password: hashedPassword } }, { new: true });
+  return updatedUser;
+};

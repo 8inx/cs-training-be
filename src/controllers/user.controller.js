@@ -11,8 +11,9 @@ import {
 export const updateUserHandler = async (req, res, next) => {
   try {
     const userId = req.params.id;
+    const requester = req.user;
     const input = req.body;
-    const updatedUser = await updateUser(userId, input);
+    const updatedUser = await updateUser(userId, requester, input);
     res.status(200).json({ data: updatedUser, mesage: 'update success' });
   } catch (error) {
     next(error);

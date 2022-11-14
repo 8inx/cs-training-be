@@ -52,7 +52,7 @@ route.post('/', validationMiddleware(inviteUserSchema), verifyAdmin, inviteUserH
  *  patch:
  *    tags:
  *      - invite
- *    summary: refresh invite
+ *    summary: resend invite
  *    parameters:
  *    - name: id
  *      in: path
@@ -115,7 +115,7 @@ route.delete('/:id', validationMiddleware(deleteInviteSchema), verifyAdmin, dele
  *  get:
  *    tags:
  *      - invite
- *    summary: refresh invite
+ *    summary: get all invites
  *    responses:
  *      200:
  *        description: 'Success'
